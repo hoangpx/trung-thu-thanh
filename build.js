@@ -9,7 +9,7 @@ const out=`<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#040506">
-<meta name="description" content="Game thủ thành châm biếm theo phong cách kính hiển vi: bảo vệ quả trứng khỏi 250 triệu tinh trùng.">
+<meta name="description" content="Thủ Khoa Đầu Thai – game thủ thành châm biếm phong cách kính hiển vi: bảo vệ quả trứng khỏi 250 triệu tinh trùng. A satirical microscope-style defense game: protect the egg from 250 million sperm.">
 ${head}</head>
 <body>
 ${body}

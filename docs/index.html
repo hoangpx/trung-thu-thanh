@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#040506">
-<meta name="description" content="Game thủ thành châm biếm theo phong cách kính hiển vi: bảo vệ quả trứng khỏi 250 triệu tinh trùng.">
-<title>Trứng Thủ Thành</title>
+<meta name="description" content="Thủ Khoa Đầu Thai – game thủ thành châm biếm phong cách kính hiển vi: bảo vệ quả trứng khỏi 250 triệu tinh trùng. A satirical microscope-style defense game: protect the egg from 250 million sperm.">
+<title>Thủ Khoa Đầu Thai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
@@ -179,6 +179,18 @@ h1,h2,h3{margin:0;text-wrap:balance;line-height:1.1;font-weight:800;}
 .geneBar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;font-size:11.5px;color:var(--muted);font-family:var(--mono);}
 .rewards{font-size:13px;color:#c3cdd3;margin:-4px 0 14px;line-height:1.7;}
 .rewards b{font-weight:700;}
+.slot.fuse{border-color:rgba(255,181,71,.85);background:linear-gradient(135deg,rgba(185,226,255,.16),rgba(255,181,71,.2));color:#ffe2b0;}
+.slot.fuse .fi{display:flex;}
+.slot.fuse .fi svg{width:20px;height:20px;}
+.slot.fuse b{background:linear-gradient(90deg,var(--ice),var(--amber));color:#06090b;}
+.card.k-fuse{border-color:rgba(255,181,71,.9);background:linear-gradient(160deg,rgba(16,30,44,.96),rgba(52,32,6,.96));box-shadow:0 0 26px rgba(255,181,71,.22);}
+.card.k-fuse .kind{color:#ffd08a;}
+.card.k-fuse .ic{color:#ffd08a;border-color:rgba(255,181,71,.4);background:rgba(255,181,71,.08);}
+.langs{position:absolute;top:max(14px,env(safe-area-inset-top));left:14px;display:flex;gap:6px;z-index:2;}
+.flag{width:36px;height:24px;border-radius:4px;overflow:hidden;border:1px solid var(--line2);padding:0;opacity:.45;transition:opacity .15s;}
+.flag:hover{opacity:.8;}
+.flag.on{opacity:1;border-color:var(--ice);box-shadow:0 0 0 1px var(--ice);}
+.flag svg{display:block;width:100%;height:100%;}
 .help{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;line-height:1.55;font-size:14.5px;color:#c3cdd3;}
 .help b{color:#fff;}
 .bestiary{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:14px;}
@@ -192,93 +204,94 @@ h1,h2,h3{margin:0;text-wrap:balance;line-height:1.1;font-weight:800;}
 </head>
 <body>
 <div id="app">
-  <canvas id="cv" aria-label="Ảnh kính hiển vi: trứng ở giữa, tinh trùng bơi tới từ mọi phía"></canvas>
+  <canvas id="cv" data-i18n-aria="cvAria"></canvas>
 
   <div id="hud" hidden>
     <div class="hudRow">
       <span class="rec"><i></i><span id="tTime">00:00.0</span></span>
-      <span class="hudTxt">hạ <b id="tKills">0</b></span>
+      <span class="hudTxt"><span data-i18n="kills"></span> <b id="tKills">0</b></span>
       <span class="grow"></span>
-      <span class="hudTxt" id="tBoss">boss sau 02:30</span>
-      <button class="hudBtn" id="soundBtn" aria-label="Bật/tắt âm thanh"></button>
-      <button class="hudBtn" id="speedBtn" aria-label="Đổi tốc độ">×1</button>
-      <button class="hudBtn" id="pauseBtn" aria-label="Tạm dừng">II</button>
+      <span class="hudTxt" id="tBoss"></span>
+      <button class="hudBtn" id="soundBtn" data-i18n-aria="sound"></button>
+      <button class="hudBtn" id="speedBtn" data-i18n-aria="speed">×1</button>
+      <button class="hudBtn" id="pauseBtn" data-i18n-aria="pause">II</button>
     </div>
     <div id="xpWrap"><div id="xpBar"></div></div>
-    <div class="meta"><span id="xpTxt">CẤP 1</span><span id="warn"></span><span class="scale"><span id="scaleBar" style="width:40px"></span>50 µm · ×400</span></div>
+    <div class="meta"><span id="xpTxt"></span><span id="warn"></span><span class="scale"><span id="scaleBar" style="width:40px"></span>50 µm · ×400</span></div>
     <div id="bossWrap" hidden><div id="bossName"><span id="bossTitle"></span><span id="bossPct"></span></div><div id="bossHp"><i id="bossFill"></i></div></div>
   </div>
 
   <div id="bottom" hidden>
     <div id="slots"></div>
     <div class="grow"></div>
-    <button id="activeBtn" aria-label="Phản Ứng Vỏ: đẩy lùi tinh trùng quanh trứng">PHẢN ỨNG<br>VỎ<span id="activeTxt">sẵn sàng</span><canvas id="activeCd" width="176" height="176"></canvas><kbd>Space</kbd></button>
+    <button id="activeBtn" data-i18n-aria="activeAria"><b data-i18n="activeName" style="font-weight:800"></b><span id="activeTxt"></span><canvas id="activeCd" width="176" height="176"></canvas><kbd>Space</kbd></button>
   </div>
 
   <div id="banner"></div>
   <div id="sub"></div>
 
   <section id="home" class="overlay">
-    <button class="hudBtn" id="soundBtnHome" aria-label="Bật/tắt âm thanh" style="position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;z-index:2"></button>
+    <div class="langs"><button class="flag" data-lang="vi" aria-label="Tiếng Việt"><svg viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#da251d"/><polygon fill="#ff0" points="15,4 16.18,7.62 20,7.64 16.91,9.88 18.09,13.5 15,11.27 11.91,13.5 13.09,9.88 10,7.64 13.82,7.62"/></svg></button><button class="flag" data-lang="en" aria-label="English"><svg viewBox="0 0 60 30" aria-hidden="true"><clipPath id="ukc"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#ukc)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></svg></button></div>
+    <button class="hudBtn" id="soundBtnHome" data-i18n-aria="sound" style="position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;z-index:2"></button>
     <div class="homeTop">
-      <div class="eyebrow">Phim tài liệu tương tác · Ống dẫn trứng · 37 °C</div>
-      <h1>Trứng Thủ Thành</h1>
-      <p>Khoảng 250 triệu tinh trùng vừa được phóng ra. Bạn là quả trứng. Chỉ cần một con chạm vào màng là thụ thai, và đứa trẻ sinh ra sẽ là bạn.</p>
+      <div class="eyebrow" data-i18n="homeEyebrow"></div>
+      <h1>Thủ Khoa Đầu Thai</h1>
+      <p data-i18n="homeIntro"></p>
     </div>
     <div class="homeBtns">
-      <button class="primary" id="playBtn">Bắt đầu chặn</button>
+      <button class="primary" id="playBtn" data-i18n="play"></button>
       <div class="row">
-        <button class="ghost" id="evoBtn">Tiến hóa<small><span class="adn" id="adnHome">0</span> ADN · <span class="stem" id="stemHome">0</span> TBG</small></button>
-        <button class="ghost" id="boardBtn">Xếp hạng<small id="bestHome">kỷ lục –</small></button>
-        <button class="ghost" id="helpBtn">Cách chơi<small>vũ khí · địch</small></button>
+        <button class="ghost" id="evoBtn"><span data-i18n="evo"></span><small><span class="adn" id="adnHome">0</span> <span data-i18n="dnaShort"></span> · <span class="stem" id="stemHome">0</span> <span data-i18n="scShort"></span></small></button>
+        <button class="ghost" id="boardBtn"><span data-i18n="board"></span><small id="bestHome"></small></button>
+        <button class="ghost" id="helpBtn"><span data-i18n="help"></span><small data-i18n="helpSub"></small></button>
       </div>
     </div>
   </section>
 
   <section id="levelup" class="overlay dim" hidden>
     <div class="sheet">
-      <div class="luHead"><div class="eyebrow" id="luSub">Đột biến có lợi</div><h2 id="luTitle">Tiến hóa · Cấp 2</h2></div>
+      <div class="luHead"><div class="eyebrow" id="luSub"></div><h2 id="luTitle"></h2></div>
       <div id="cards"></div>
-      <div class="luFoot"><button class="chip" id="rerollBtn">Đổi thẻ (0)</button></div>
+      <div class="luFoot"><button class="chip" id="rerollBtn"></button></div>
     </div>
   </section>
 
   <section id="pause" class="overlay dim" hidden>
     <div class="sheet" style="text-align:center">
-      <div class="eyebrow">Tạm dừng ghi hình</div>
-      <h2 style="font-size:30px;margin-top:4px">Mẫu đang đứng yên</h2>
-      <p class="roast">Tinh trùng cũng đứng yên. Chúng sẽ chờ bạn, như chúng vẫn luôn chờ.</p>
+      <div class="eyebrow" data-i18n="pauseEyebrow"></div>
+      <h2 style="font-size:30px;margin-top:4px" data-i18n="pauseTitle"></h2>
+      <p class="roast" data-i18n="pauseText"></p>
       <div id="pauseBuild" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:16px"></div>
-      <div class="acts"><button class="secondary" id="quitBtn">Bỏ cuộc</button><button class="primary" id="resumeBtn">Chơi tiếp</button></div>
+      <div class="acts"><button class="secondary" id="quitBtn" data-i18n="quit"></button><button class="primary" id="resumeBtn" data-i18n="resume"></button></div>
     </div>
   </section>
 
   <section id="over" class="overlay dim" hidden>
     <div class="sheet">
-      <canvas id="usCv" width="480" height="360" aria-label="Ảnh siêu âm thai nhi"></canvas>
-      <div class="eyebrow" id="overTag">Thụ tinh thành công</div>
-      <h2 id="overTitle">Chúc mừng, bạn đã được sinh ra</h2>
+      <canvas id="usCv" width="480" height="360" data-i18n-aria="usAria"></canvas>
+      <div class="eyebrow" id="overTag"></div>
+      <h2 id="overTitle" data-i18n="overTitle"></h2>
       <p class="roast" id="roast"></p>
       <div class="stats">
-        <div class="stat"><b id="sTime">0:00</b><span>Cầm cự</span></div>
-        <div class="stat"><b id="sKills">0</b><span>Hạ gục</span></div>
-        <div class="stat"><b id="sLv">1</b><span>Cấp</span></div>
-        <div class="stat"><b id="sAdn" class="adn">+0</b><span>ADN</span></div>
+        <div class="stat"><b id="sTime">0:00</b><span data-i18n="stTime"></span></div>
+        <div class="stat"><b id="sKills">0</b><span data-i18n="stKills"></span></div>
+        <div class="stat"><b id="sLv">1</b><span data-i18n="stLv"></span></div>
+        <div class="stat"><b id="sAdn" class="adn">+0</b><span data-i18n="dnaShort"></span></div>
       </div>
       <div class="rewards" id="rewards"></div>
       <form class="nameBox" id="nameForm">
-        <label for="nameIn">Đổi tên khai sinh để lên bảng xếp hạng?</label>
-        <div class="nameRow"><input id="nameIn" maxlength="20" autocomplete="off" placeholder="Tên đứa trẻ"><button class="btnIce" id="saveBtn" type="submit">Lưu</button></div>
+        <label for="nameIn" data-i18n="nameLabel"></label>
+        <div class="nameRow"><input id="nameIn" maxlength="20" autocomplete="off" data-i18n-ph="namePh"><button class="btnIce" id="saveBtn" type="submit" data-i18n="save"></button></div>
         <div id="saveMsg"></div>
         <ol class="board mini" id="overBoard"></ol>
       </form>
-      <div class="acts"><button class="secondary" id="homeBtn">Trang chủ</button><button class="primary" id="againBtn">Chơi lại</button></div>
+      <div class="acts"><button class="secondary" id="homeBtn" data-i18n="home"></button><button class="primary" id="againBtn" data-i18n="again"></button></div>
     </div>
   </section>
 
   <section id="boardPanel" class="overlay dim" hidden>
     <div class="sheet">
-      <div class="panelHead"><div><div class="eyebrow">Ai trì hoãn việc chào đời lâu nhất</div><h2>Bảng xếp hạng</h2></div><button class="x" data-close aria-label="Đóng">×</button></div>
+      <div class="panelHead"><div><div class="eyebrow" data-i18n="boardEyebrow"></div><h2 data-i18n="board"></h2></div><button class="x" data-close data-i18n-aria="close">×</button></div>
       <ol class="board" id="boardList"></ol>
       <p class="note" id="boardNote"></p>
     </div>
@@ -286,15 +299,15 @@ h1,h2,h3{margin:0;text-wrap:balance;line-height:1.1;font-weight:800;}
 
   <section id="evoPanel" class="overlay dim" hidden>
     <div class="sheet">
-      <div class="panelHead"><div><div class="eyebrow"><span class="adn" id="adnPanel">0</span> ADN · <span class="stem" id="stemPanel">0</span> tế bào gốc</div><h2>Tiến hóa</h2></div><button class="x" data-close aria-label="Đóng">×</button></div>
-      <div class="tabs" role="tablist"><button data-tab="stat" role="tab">Chỉ số</button><button data-tab="wpn" role="tab">Vũ khí</button><button data-tab="gene" role="tab">Gen</button></div>
-      <div id="tabStat"><div class="permList" id="permList"></div><p class="note">ADN nhận sau mỗi ván. Thua càng muộn, ADN càng nhiều.</p></div>
-      <div id="tabWpn" hidden><p class="note" style="margin:0 0 6px">Chọn tối đa 4 vũ khí phụ mang vào trận. Khi lên cấp, chỉ vũ khí đang mang mới xuất hiện. Mở khóa bằng tế bào gốc (TBG), nâng cấp bằng ADN.</p><div class="permList" id="wpnList"></div></div>
+      <div class="panelHead"><div><div class="eyebrow"><span class="adn" id="adnPanel">0</span> <span data-i18n="dnaShort"></span> · <span class="stem" id="stemPanel">0</span> <span data-i18n="scLong"></span></div><h2 data-i18n="evo"></h2></div><button class="x" data-close data-i18n-aria="close">×</button></div>
+      <div class="tabs" role="tablist"><button data-tab="stat" role="tab" data-i18n="tabStat"></button><button data-tab="wpn" role="tab" data-i18n="tabWpn"></button><button data-tab="gene" role="tab" data-i18n="tabGene"></button></div>
+      <div id="tabStat"><div class="permList" id="permList"></div><p class="note" data-i18n="statNote"></p></div>
+      <div id="tabWpn" hidden><p class="note" style="margin:0 0 6px" data-i18n="wpnNote"></p><div class="permList" id="wpnList"></div></div>
       <div id="tabGene" hidden>
         <div class="geneSlots" id="geneSlots"></div>
-        <div class="geneBar"><span id="geneCount"></span><button class="chip" id="mergeAll">Hợp nhất tất cả</button></div>
+        <div class="geneBar"><span id="geneCount"></span><button class="chip" id="mergeAll" data-i18n="mergeAll"></button></div>
         <div class="geneInv" id="geneInv"></div>
-        <p class="note">Gen rơi ra sau mỗi ván, ván càng dài và hạ càng nhiều boss thì càng nhiều gen hiếm. Chạm vào gen để gắn hoặc tháo. 3 gen giống nhau, cùng độ hiếm sẽ hợp nhất thành 1 gen hiếm hơn.</p>
+        <p class="note" data-i18n="geneNote"></p>
       </div>
       <p class="note" id="cloudNote" style="border-top:1px solid var(--line);padding-top:10px"></p>
     </div>
@@ -302,28 +315,9 @@ h1,h2,h3{margin:0;text-wrap:balance;line-height:1.1;font-weight:800;}
 
   <section id="helpPanel" class="overlay dim" hidden>
     <div class="sheet">
-      <div class="panelHead"><div><div class="eyebrow">Sổ tay quan sát</div><h2>Cách chơi</h2></div><button class="x" data-close aria-label="Đóng">×</button></div>
-      <ol class="help">
-        <li><b>Pháo Nhân</b> (nhân tế bào ở giữa trứng) bắn <b>Hạt Vỏ</b> liên tục theo hướng bạn chỉ. Máy tính: di chuột, hoặc phím A/D, ←/→. Điện thoại: chạm và kéo ngón tay quanh trứng. Hạt vỏ là cơ chế có thật: trứng dùng nó để chặn tinh trùng thứ hai.</li>
-        <li>Vũ khí phụ tự tìm mục tiêu, chỉ Pháo Nhân là do bạn ngắm.</li>
-        <li>Hạ tinh trùng để lấy kinh nghiệm. Mỗi lần lên cấp, chọn 1 trong 3 đột biến: nâng Pháo Nhân, mở vũ khí phụ (tối đa 4), hoặc nâng vũ khí phụ đã có.</li>
-        <li>Nâng một vũ khí phụ đủ 3 lần sẽ mở đột biến <b>tối thượng</b> (viền vàng).</li>
-        <li>Ngoài trận, mục <b>Tiến hóa</b> có 3 phần: Chỉ số (ADN), Vũ khí (mở khóa, nâng cấp, chọn 4 vũ khí mang theo) và Gen (gắn gen rơi ra sau mỗi ván, hợp nhất 3 gen thành gen hiếm hơn). Tiến trình lưu vào tài khoản claude.ai của bạn.</li>
-        <li><b>Phản Ứng Vỏ</b> (phím Space) làm màng trứng cứng lại và đẩy lùi mọi tinh trùng ở gần. Hồi chiêu 35 giây.</li>
-        <li>Cứ 2 phút 30 giây có một <b>Đại Pháo Hai Bi</b> xuất hiện, con sau mạnh hơn con trước.</li>
-        <li>Chỉ cần <b>một con</b> chạm màng trứng là thụ thai. Đứa trẻ sinh ra chính là bạn.</li>
-        <li>Máy tính: chuột ngắm, Space dùng chiêu, P hoặc Esc tạm dừng, phím 1–3 chọn thẻ, R đổi thẻ, M tắt tiếng.</li>
-      </ol>
-      <div class="bestiary">
-        <div><b>Bình thường</b><i>normozoospermia</i>Đông nhất, bơi thẳng.</div>
-        <div><b>Tiến tới nhanh</b><i>progressive motility A</i>Thân mảnh, rất nhanh, ít máu.</div>
-        <div><b>Đầu to</b><i>macrocephalic</i>Chậm, rất trâu.</div>
-        <div><b>Bơi hỗn loạn</b><i>hyperactivated</i>Lạng lách, né được đạn.</div>
-        <div><b>Hai đầu</b><i>bicephalic</i>Bị hạ thì tách thành 2–3 con.</div>
-        <div><b>Acrosome dày</b><i>thick acrosome</i>Mũ đầu cứng, đỡ 1/3 sát thương.</div>
-        <div><b>Bầy non</b><i>immature</i>Nhỏ, kéo tới theo bầy.</div>
-        <div><b>Đại Pháo Hai Bi</b><i>boss</i>Nguồn cung. Liên tục bắn thêm tinh trùng.</div>
-      </div>
+      <div class="panelHead"><div><div class="eyebrow" data-i18n="helpEyebrow"></div><h2 data-i18n="help"></h2></div><button class="x" data-close data-i18n-aria="close">×</button></div>
+      <ol class="help" data-i18n="helpList"></ol>
+      <div class="bestiary" data-i18n="bestiary"></div>
     </div>
   </section>
 </div>
@@ -335,6 +329,93 @@ const TAU=Math.PI*2, $=id=>document.getElementById(id);
 const rnd=(a,b)=>a+Math.random()*(b-a), clamp=(v,a,b)=>v<a?a:v>b?b:v;
 const fmtT=s=>{s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const fmtRec=s=>{const m=Math.floor(s/60),x=s-m*60;return String(m).padStart(2,'0')+':'+x.toFixed(1).padStart(4,'0')};
+
+/* ---------- language ----------
+   Default Vietnamese. Without a saved choice: a Vietnamese time zone or browser
+   language gives Vietnamese, anything else English. No IP lookup needed. */
+const LANG_KEY='tkdt.lang';
+function detectLang(){
+  try{const v=localStorage.getItem(LANG_KEY);if(v==='vi'||v==='en')return v}catch(e){}
+  let tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+  const langs=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']).join(',').toLowerCase();
+  if(/Asia\/(Ho_Chi_Minh|Saigon)/.test(tz)||/(^|,)vi/.test(langs))return 'vi';
+  return tz||langs?'en':'vi';
+}
+let LANG=detectLang();
+const L=(vi,en)=>LANG==='en'?en:vi;
+const tr=(o,f)=>LANG==='en'&&o[f+'_en']!=null?o[f+'_en']:o[f];
+const HT={
+  cvAria:['Ảnh kính hiển vi: trứng ở giữa, tinh trùng bơi tới từ mọi phía','Microscope view: an egg in the centre, sperm swimming in from every side'],
+  kills:['hạ','kills'],sound:['Bật/tắt âm thanh','Toggle sound'],speed:['Đổi tốc độ','Change speed'],pause:['Tạm dừng','Pause'],
+  activeAria:['Phản Ứng Vỏ: đẩy lùi tinh trùng quanh trứng','Cortical Reaction: push back sperm around the egg'],
+  activeName:['PHẢN ỨNG<br>VỎ','CORTICAL<br>REACTION'],
+  homeEyebrow:['Phim tài liệu tương tác · Ống dẫn trứng · 37 °C','Interactive documentary · Fallopian tube · 37 °C'],
+  homeIntro:['Khoảng 250 triệu tinh trùng vừa được phóng ra. Bạn là quả trứng. Chỉ cần một con chạm vào màng là thụ thai, và đứa trẻ sinh ra sẽ là bạn.','About 250 million sperm have just been released. You are the egg. If a single one touches your membrane, fertilization happens, and the baby that is born will be you.'],
+  play:['Bắt đầu chặn','Start blocking'],evo:['Tiến hóa','Evolution'],dnaShort:['ADN','DNA'],scShort:['TBG','SC'],scLong:['tế bào gốc','stem cells'],
+  board:['Xếp hạng','Leaderboard'],help:['Cách chơi','How to play'],helpSub:['vũ khí · địch','weapons · enemies'],
+  pauseEyebrow:['Tạm dừng ghi hình','Recording paused'],pauseTitle:['Mẫu đang đứng yên','Specimen on hold'],
+  pauseText:['Tinh trùng cũng đứng yên. Chúng sẽ chờ bạn, như chúng vẫn luôn chờ.','The sperm are frozen too. They will wait for you, as they always do.'],
+  quit:['Bỏ cuộc','Give up'],resume:['Chơi tiếp','Resume'],usAria:['Ảnh siêu âm thai nhi','Foetal ultrasound'],
+  overTitle:['Chúc mừng, bạn đã được sinh ra','Congratulations, you have been born'],
+  stTime:['Cầm cự','Survived'],stKills:['Hạ gục','Kills'],stLv:['Cấp','Level'],
+  nameLabel:['Đổi tên khai sinh để lên bảng xếp hạng?','Change your birth name to join the leaderboard?'],namePh:['Tên đứa trẻ','Baby name'],
+  save:['Lưu','Save'],home:['Trang chủ','Home'],again:['Chơi lại','Play again'],close:['Đóng','Close'],
+  boardEyebrow:['Ai trì hoãn việc chào đời lâu nhất','Who postponed being born the longest'],
+  tabStat:['Chỉ số','Stats'],tabWpn:['Vũ khí','Weapons'],tabGene:['Gen','Genes'],
+  statNote:['ADN nhận sau mỗi ván. Thua càng muộn, ADN càng nhiều.','You earn DNA after every run. The later you lose, the more DNA you get.'],
+  wpnNote:['Chọn tối đa 4 vũ khí phụ mang vào trận. Khi lên cấp, chỉ vũ khí đang mang mới xuất hiện. Mở khóa bằng tế bào gốc (TBG), nâng cấp bằng ADN.','Pick up to 4 secondary weapons to bring into a run. Only equipped weapons show up when you level up. Unlock with stem cells (SC), upgrade with DNA.'],
+  mergeAll:['Hợp nhất tất cả','Merge all'],
+  geneNote:['Gen rơi ra sau mỗi ván, ván càng dài và hạ càng nhiều boss thì càng nhiều gen hiếm. Chạm vào gen để gắn hoặc tháo. 3 gen giống nhau, cùng độ hiếm sẽ hợp nhất thành 1 gen hiếm hơn.','Genes drop after every run; longer runs and more bosses mean rarer genes. Tap a gene to equip or remove it. 3 identical genes of the same rarity merge into 1 rarer gene.'],
+  helpEyebrow:['Sổ tay quan sát','Field notes'],
+  helpList:[`<li><b>Pháo Nhân</b> (nhân tế bào ở giữa trứng) bắn <b>Hạt Vỏ</b> liên tục theo hướng bạn chỉ. Máy tính: di chuột, hoặc phím A/D, ←/→. Điện thoại: chạm và kéo ngón tay quanh trứng. Hạt vỏ là cơ chế có thật: trứng dùng nó để chặn tinh trùng thứ hai.</li>
+        <li>Vũ khí phụ tự tìm mục tiêu, chỉ Pháo Nhân là do bạn ngắm.</li>
+        <li>Hạ tinh trùng để lấy kinh nghiệm. Mỗi lần lên cấp, chọn 1 trong 3 đột biến: nâng Pháo Nhân, mở vũ khí phụ (tối đa 4 ô), hoặc nâng vũ khí phụ đã có.</li>
+        <li>Nâng một vũ khí phụ đủ 3 lần sẽ mở đột biến <b>tối thượng</b> (viền vàng).</li>
+        <li><b>Hợp nhất:</b> khi 2 vũ khí hợp nhau đều đạt tối thượng (★), thẻ hợp nhất sẽ xuất hiện. Hai vũ khí gộp lại thành 1 kỹ năng đặc biệt và trả lại 1 ô trống. Công thức: Xung Thần Kinh + Tia Ty Thể, Đại Thực Bào + Bom Kháng Thể, Sóng Canxi + Lông Mao Xoay, Phun Enzyme + Xung Thần Kinh.</li>
+        <li>Ngoài trận, mục <b>Tiến hóa</b> có 3 phần: Chỉ số (ADN), Vũ khí (mở khóa, nâng cấp, chọn 4 vũ khí mang theo) và Gen (gắn gen rơi ra sau mỗi ván, hợp nhất 3 gen thành gen hiếm hơn).</li>
+        <li><b>Phản Ứng Vỏ</b> (phím Space) làm màng trứng cứng lại và đẩy lùi mọi tinh trùng ở gần. Hồi chiêu 35 giây.</li>
+        <li>Cứ 2 phút 30 giây có một boss. Có 5 boss luân phiên, mỗi con một hình dạng và một kỹ năng riêng, vòng sau mạnh hơn vòng trước.</li>
+        <li>Chỉ cần <b>một con</b> chạm màng trứng là thụ thai. Đứa trẻ sinh ra chính là bạn.</li>
+        <li>Máy tính: chuột ngắm, Space dùng chiêu, P hoặc Esc tạm dừng, phím 1–3 chọn thẻ, R đổi thẻ, M tắt tiếng.</li>`,
+    `<li>The <b>Nucleus Cannon</b> (the cell nucleus in the middle of the egg) fires <b>Cortical Granules</b> nonstop wherever you point. Desktop: move the mouse, or use A/D, ←/→. Phone: touch and drag around the egg. Cortical granules are real: eggs use them to block a second sperm.</li>
+        <li>Secondary weapons aim themselves. Only the Nucleus Cannon is yours to aim.</li>
+        <li>Kill sperm to gain experience. Every level up, pick 1 of 3 mutations: upgrade the cannon, unlock a secondary weapon (4 slots), or upgrade one you have.</li>
+        <li>Upgrade a secondary weapon 3 times to unlock its <b>ultimate</b> mutation (gold border).</li>
+        <li><b>Fusion:</b> when 2 compatible weapons both reach ultimate (★), a fusion card appears. They merge into 1 special skill and free up a slot. Recipes: Nerve Impulse + Mitochondrial Beam, Macrophage + Antibody Bomb, Calcium Wave + Spinning Cilia, Enzyme Spray + Nerve Impulse.</li>
+        <li>Outside runs, <b>Evolution</b> has 3 tabs: Stats (DNA), Weapons (unlock, upgrade, pick 4 to bring) and Genes (equip genes that drop after runs, merge 3 into a rarer one).</li>
+        <li><b>Cortical Reaction</b> (Space) hardens the membrane and pushes back every nearby sperm. 35 s cooldown.</li>
+        <li>A boss arrives every 2 min 30 s. 5 bosses rotate, each with its own shape and skill, and every cycle is stronger.</li>
+        <li><b>One sperm</b> touching the membrane is enough. The baby that is born is you.</li>
+        <li>Desktop: mouse to aim, Space for the skill, P or Esc to pause, 1–3 to pick cards, R to reroll, M to mute.</li>`],
+  bestiary:[`<div><b>Bình thường</b><i>normozoospermia</i>Đông nhất, bơi thẳng.</div>
+        <div><b>Tiến tới nhanh</b><i>progressive motility A</i>Thân mảnh, rất nhanh, ít máu.</div>
+        <div><b>Đầu to</b><i>macrocephalic</i>Chậm, rất trâu.</div>
+        <div><b>Bơi hỗn loạn</b><i>hyperactivated</i>Lạng lách, né được đạn.</div>
+        <div><b>Hai đầu</b><i>bicephalic</i>Bị hạ thì tách thành 2–3 con.</div>
+        <div><b>Acrosome dày</b><i>thick acrosome</i>Mũ đầu cứng, đỡ 1/3 sát thương.</div>
+        <div><b>Bầy non</b><i>immature</i>Nhỏ, kéo tới theo bầy.</div>
+        <div><b>5 boss</b><i>boss</i>Đại Pháo Hai Bi, Tuyến Tiền Liệt, Túi Tinh, Mào Tinh, Testosterone.</div>`,
+    `<div><b>Normal</b><i>normozoospermia</i>The most common, swims straight.</div>
+        <div><b>Fast swimmer</b><i>progressive motility A</i>Slim, very fast, low health.</div>
+        <div><b>Big head</b><i>macrocephalic</i>Slow and very tough.</div>
+        <div><b>Erratic</b><i>hyperactivated</i>Zigzags and dodges shots.</div>
+        <div><b>Two-headed</b><i>bicephalic</i>Splits into 2–3 when killed.</div>
+        <div><b>Thick acrosome</b><i>thick acrosome</i>Hard cap, blocks 1/3 of damage.</div>
+        <div><b>Immature</b><i>immature</i>Small, comes in swarms.</div>
+        <div><b>5 bosses</b><i>boss</i>Twin-Ball Cannon, Prostate, Seminal Vesicle, Epididymis, Testosterone.</div>`],
+};
+function applyLang(){
+  const k=LANG==='en'?1:0;document.documentElement.lang=LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=HT[el.dataset.i18n];if(v)el.innerHTML=v[k]});
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{const v=HT[el.dataset.i18nAria];if(v)el.setAttribute('aria-label',v[k].replace(/<[^>]+>/g,' '))});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const v=HT[el.dataset.i18nPh];if(v)el.placeholder=v[k]});
+  document.querySelectorAll('.flag').forEach(b=>{b.classList.toggle('on',b.dataset.lang===LANG);b.setAttribute('aria-pressed',b.dataset.lang===LANG)});
+}
+function setLang(l){
+  LANG=l;try{localStorage.setItem(LANG_KEY,l)}catch(e){}
+  applyLang();refreshHome();renderBoard();updCloudNote();renderSound();
+  if(!$('evoPanel').hidden)renderEvo();
+}
 
 /* ---------- save ---------- */
 const KEY='trungthuthanh.v1';
@@ -366,7 +447,7 @@ async function flushCloud(){
   cloudBusy=false;updCloudNote();
   if(cloudDirty)flushCloud();
 }
-function updCloudNote(){const n=$('cloudNote');if(!n)return;if(SB.saveOn){n.textContent=cloudOk?'Tiến trình được lưu trên máy chủ và gắn với trình duyệt này. Vào lại bằng trình duyệt này là còn nguyên; xóa dữ liệu trình duyệt thì mất.':'Đang đồng bộ tiến trình…';return}n.textContent=cloudRef&&cloudOk?'Tiến trình được lưu vào tài khoản claude.ai của bạn. Vào lại ở máy nào cũng còn.':cloudRef?'Đang đồng bộ tiến trình với tài khoản…':'Tiến trình đang lưu trên trình duyệt này. Mở game trên claude.ai để lưu vào tài khoản.'}
+function updCloudNote(){const n=$('cloudNote');if(!n)return;if(SB.saveOn){n.textContent=cloudOk?L('Tiến trình được lưu trên máy chủ và gắn với trình duyệt này. Vào lại bằng trình duyệt này là còn nguyên; xóa dữ liệu trình duyệt thì mất.','Your progress is saved on the server and tied to this browser. Come back with this browser and it is all there; clearing browser data loses it.'):L('Đang đồng bộ tiến trình…','Syncing progress…');return}n.textContent=cloudRef&&cloudOk?L('Tiến trình được lưu vào tài khoản claude.ai của bạn. Vào lại ở máy nào cũng còn.','Progress is saved to your claude.ai account, on any device.'):cloudRef?L('Đang đồng bộ tiến trình với tài khoản…','Syncing progress with your account…'):L('Tiến trình đang lưu trên trình duyệt này.','Progress is saved in this browser.')}
 const P=id=>S.perm[id]||0;
 
 const PERM=[
@@ -374,7 +455,7 @@ const PERM=[
   {id:'rate',name:'Nhịp Tế Bào',max:15,desc:l=>`+${l*4}% tốc độ bắn`},
   {id:'xp',name:'Trí Nhớ Miễn Dịch',max:10,desc:l=>`+${l*10}% kinh nghiệm`},
   {id:'cd',name:'Phản Xạ Nhanh',max:6,desc:l=>`Phản Ứng Vỏ hồi nhanh hơn ${Math.round((1-Math.pow(.9,l))*100)}%`},
-  {id:'reroll',name:'Tái Tổ Hợp',max:3,desc:l=>`${l} lượt đổi thẻ mỗi trận`},
+  {id:'reroll',name:'Tái Tổ Hợp',max:3,desc:l=>`+${l} lượt đổi thẻ mỗi trận (mặc định 1)`},
   {id:'start',name:'Khởi Đầu Thuận Lợi',max:2,desc:l=>`Vào trận được chọn ngay ${l} đột biến`},
   {id:'crit',name:'Đột Biến Bẩm Sinh',max:10,desc:l=>`+${l*2}% tỉ lệ chí mạng`},
   {id:'adn',name:'Kho Gen',max:10,desc:l=>`+${l*10}% ADN nhận được`},
@@ -390,9 +471,11 @@ const GENES={
   foxo3:{name:'Gen FOXO3',stat:'adn',base:.05,label:'ADN nhận được'},
   kcnq1:{name:'Gen KCNQ1',stat:'cd',base:.04,label:'hồi Phản Ứng Vỏ'},
 };
-const RAR=[{n:'Thường',m:1,c:'#a3aeb5'},{n:'Hiếm',m:2.2,c:'#7cc4ff'},{n:'Sử thi',m:4,c:'#c59bff'},{n:'Huyền thoại',m:7,c:'#ffb547'}];
+const RAR=[{n:'Thường',n_en:'Common',m:1,c:'#a3aeb5'},{n:'Hiếm',n_en:'Rare',m:2.2,c:'#7cc4ff'},{n:'Sử thi',n_en:'Epic',m:4,c:'#c59bff'},{n:'Huyền thoại',n_en:'Legendary',m:7,c:'#ffb547'}];
+const EN_GENE={myc:'damage',actn3:'fire rate',tp53:'critical chance',col1a1:'critical damage',cftr:'secondary weapon damage',bdnf:'experience',foxo3:'DNA earned',kcnq1:'Cortical Reaction cooldown'};
+for(const k in GENES){GENES[k].label_en=EN_GENE[k];GENES[k].name_en=GENES[k].name.replace('Gen ','')+' gene'}
 const geneVal=g=>GENES[g.t].base*RAR[g.r].m;
-const geneTxt=g=>(g.t==='kcnq1'?'-':'+')+(Math.round(geneVal(g)*1000)/10)+'% '+GENES[g.t].label;
+const geneTxt=g=>(g.t==='kcnq1'?'-':'+')+(Math.round(geneVal(g)*1000)/10)+'% '+tr(GENES[g.t],'label');
 function geneBonus(){
   const b={dmg:0,rate:0,crit:0,critd:0,skill:0,xp:0,adn:0,cd:0};
   for(const id of S.equip.slice(0,S.slots)){const g=S.genes.find(x=>x.id===id);if(g&&GENES[g.t])b[GENES[g.t].stat]+=geneVal(g)}
@@ -450,6 +533,33 @@ const SK={
     ult:{name:'Vòng Xoáy Kép',desc:'Thêm một vòng xoáy quay ngược chiều.'}},
 };
 const MAX_SK=4;
+const FUSE=[
+  {id:'storm',a:'zap',b:'laser',name:'Bão Điện Sinh Học',name_en:'Bioelectric Storm',
+    desc:'Tia Ty Thể mang điện: cứ 0,6 giây, mỗi mục tiêu của tia phóng sét sang 4 con gần nhất. Tia +50% sát thương.',desc_en:'Charged beams: every 0.6 s each beam target arcs lightning to its 4 nearest neighbours. Beams +50% damage.'},
+  {id:'fleet',a:'jet',b:'bomb',name:'Phi Đội Thực Bào',name_en:'Phagocyte Squadron',
+    desc:'+2 đại thực bào. Cả phi đội rải bom kháng thể liên tục khi bay.',desc_en:'+2 macrophages. The whole squadron carpet-bombs antibody clusters as it flies.'},
+  {id:'vortex',a:'emp',b:'spin',name:'Lốc Xoáy Canxi',name_en:'Calcium Vortex',
+    desc:'Hạt lông mao làm chậm địch. Mỗi sóng canxi bắn thêm một vòng 24 hạt. Lông mao +50% sát thương.',desc_en:'Cilia granules slow enemies. Every calcium wave also fires a ring of 24 granules. Cilia +50% damage.'},
+  {id:'spark',a:'shot',b:'zap',name:'Phun Điện Giải',name_en:'Electrolyte Spray',
+    desc:'Mỗi hạt enzyme trúng đích phóng tia điện sang 2 con gần đó. Phun Enzyme +40% sát thương.',desc_en:'Every enzyme pellet that hits arcs a spark to 2 nearby sperm. Enzyme Spray +40% damage.'},
+];
+const EN_PERM={dmg:['Hardened Granules',l=>`+${l*8}% damage for all weapons`],rate:['Cell Rhythm',l=>`+${l*4}% fire rate`],xp:['Immune Memory',l=>`+${l*10}% experience`],
+  cd:['Quick Reflex',l=>`Cortical Reaction recharges ${Math.round((1-Math.pow(.9,l))*100)}% faster`],reroll:['Recombination',l=>`+${l} card reroll(s) per run (1 by default)`],
+  start:['Head Start',l=>`Pick ${l} mutation(s) right at the start`],crit:['Born Mutant',l=>`+${l*2}% critical chance`],adn:['Gene Bank',l=>`+${l*10}% DNA earned`]};
+for(const p of PERM){p.name_en=EN_PERM[p.id][0];p.desc_en=EN_PERM[p.id][1]}
+const EN_GUN={g_dmg:['Lytic Enzyme','+40% Cortical Granule damage.'],g_multi:['Mitosis','The Nucleus Cannon fires 1 extra granule per shot.'],g_pierce:['Membrane Lysozyme','Granules pierce 1 more sperm.'],
+  g_bounce:['Elastic Membrane','Granules bounce off the edge of the field.'],g_kill:['Positive Feedback','Each kill boosts fire rate for 3 s, stacking.'],g_storm:['Cytokine Storm','Fire rate ×1.35.'],g_crit:['Point Mutation','+8% critical chance (×2.5 damage).']};
+for(const g of GUN){g.name_en=EN_GUN[g.id][0];g.desc_en=EN_GUN[g.id][1]}
+const EN_SK={
+  jet:['Macrophage','An immune cell that flies like a fighter jet, hunting and shooting sperm.',{n:['Extra Macrophage','+1 macrophage.'],d:['Fast Engulfing','+50% macrophage damage.'],c:['Orbital Patrol','Circles the egg and fires twice as fast.']},['Digestive Bombs','Macrophages drop enzyme sacs that explode as they fly over enemies.']],
+  zap:['Nerve Impulse','An action potential shocks the nearest sperm, then jumps to the next one.',{j:['Saltatory Conduction','+2 jumps per bolt.'],b:['Multi-Synapse','+1 simultaneous bolt.'],d:['Action Potential','+50% impulse damage.']},['Full-Body Seizure','Each shock splashes around and paralyzes.']],
+  laser:['Mitochondrial Beam','A continuous ATP beam burns everything in a straight line.',{n:['Mitochondrial Fission','+1 beam.'],r:['Membrane Refraction','The beam bends to 1 more target.'],w:['ATP Surplus','Wider beam, +35% damage.']},['Super Mitochondria','Beam twice as wide, ×1.5 damage.']],
+  emp:['Calcium Wave','Periodically releases a calcium ion wave around the egg that damages and slows.',{r:['Ion Spread','+25% wave radius.'],c:['Open Channels','Waves fire 20% more often.'],d:['High Concentration','+55% wave damage.']},['Cell Freeze','Waves immobilize sperm for 1.5 s.']],
+  bomb:['Antibody Bomb','Drops antibody clusters into crowds that agglutinate and explode.',{n:['Clonal Expansion','+1 cluster per volley.'],r:['Wide Agglutination','+30% blast radius.'],d:['Concentrated IgG','+55% damage.']},['IgM Cluster Bomb','Each cluster splits into 5 smaller ones after exploding.']],
+  shot:['Enzyme Spray','Sprays a cone of enzymes at the most dangerous sperm.',{n:['Big Enzyme Sac','+2 pellets per spray.'],c:['Fast Contraction','Sprays 20% faster.'],d:['Thick Enzyme','+55% spray damage.']},['Corrosive Enzyme','Pellets pierce every sperm.']],
+  spin:['Spinning Cilia','Cilia around the egg beat nonstop, scattering granules in every direction.',{n:['More Cilia','+1 spinning stream.'],s:['Faster Beating','+30% spin and fire speed.'],d:['Stiff Cilia','+55% cilia damage.']},['Double Vortex','Adds a counter-rotating vortex.']],
+};
+for(const id in SK){const e=EN_SK[id],d=SK[id];d.name_en=e[0];d.desc_en=e[1];for(const u in d.ups){d.ups[u].name_en=e[2][u][0];d.ups[u].desc_en=e[2][u][1]}d.ult.name_en=e[3][0];d.ult.desc_en=e[3][1]}
 
 /* ---------- line icons ---------- */
 const IC={
@@ -590,15 +700,27 @@ const ET={
   helmet:{hp:32,spd:33,r:11,xp:3,armor:.35},
   swarm:{hp:4,spd:64,r:6,xp:.35},
 };
-const BOSSN=['Đại Pháo Hai Bi Mk.I','Đại Pháo Hai Bi Mk.II · Tăng Ca','Đại Pháo Hai Bi Mk.III · Hàng Nóng','Đại Pháo Hai Bi Mk.IV · Không Biết Mệt','Đại Pháo Hai Bi Mk.V · Tổng Tư Lệnh'];
-const BOSSQ=['Nguồn cung đã xuất hiện. Công suất khoảng 1.500 tinh trùng mỗi giây.','Phiên bản tăng ca. Nó không nghỉ, và nó không định để bạn nghỉ.','Hàng nóng, sản lượng cao hơn, thái độ tệ hơn.','Không biết mệt là gì. Bạn thì biết.','Toàn bộ lực lượng còn lại. Chúc may mắn.'];
-const bossName=k=>k<=BOSSN.length?BOSSN[k-1]:`Đại Pháo Hai Bi Mk.${k} · Huyền Thoại`;
+const BOSSES=[
+  {id:'testes',hp:1,name:'Đại Pháo Hai Bi',name_en:'Twin-Ball Cannon',skill:'Phóng đàn',skill_en:'Volley',
+    q:'Nguồn cung đã xuất hiện. Công suất khoảng 1.500 tinh trùng mỗi giây, và nó bắn thẳng về phía bạn.',q_en:'The supply has arrived. About 1,500 sperm per second, all aimed at you.'},
+  {id:'prostate',hp:1.2,name:'Tuyến Tiền Liệt Bọc Thép',name_en:'Armored Prostate',skill:'Khiên dịch',skill_en:'Fluid Shield',
+    q:'Nó phủ dịch bảo vệ lên cả đàn: tinh trùng có khiên chỉ nhận 1/4 sát thương. Hạ nó trước.',q_en:'It coats the swarm in protective fluid: shielded sperm take only 1/4 damage. Kill it first.'},
+  {id:'vesicle',hp:1,name:'Túi Tinh Cuồng Nộ',name_en:'Raging Seminal Vesicle',skill:'Lao tới',skill_en:'Charge',
+    q:'Nó không bắn, nó húc. Thấy vạch đỏ là nó sắp lao về phía trứng.',q_en:'It does not shoot, it rams. A red line means it is about to charge the egg.'},
+  {id:'epid',hp:.9,name:'Mào Tinh Ảo Thuật',name_en:'Illusionist Epididymis',skill:'Dịch chuyển',skill_en:'Blink',
+    q:'Một ống dài khoảng 6 mét cuộn lại. Nó biến mất, hiện ra phía khác và thả cả vòng tinh trùng.',q_en:'About six metres of coiled tube. It vanishes, reappears elsewhere and drops a ring of sperm.'},
+  {id:'testo',hp:1.3,name:'Testosterone Tối Thượng',name_en:'Supreme Testosterone',skill:'Kích thích',skill_en:'Hype',
+    q:'Không phải cơ quan, là hormone. Còn sống thì cả đàn nhanh hơn 30%, và nó tự hồi máu.',q_en:'Not an organ, a hormone. While it lives the whole swarm is 30% faster, and it heals itself.'},
+];
+const ROMAN=['','II','III','IV','V','VI','VII','VIII','IX','X'];
+const bossDef=k=>BOSSES[(k-1)%BOSSES.length];
+const bossName=k=>{const c=Math.floor((k-1)/BOSSES.length);return tr(bossDef(k),'name')+(c?' '+(ROMAN[c]||'×'+(c+1)):'')};
 const BOSS_EVERY=150;
 
 function newRun(){
   R={t:0,kills:0,lvl:1,xp:0,pending:0,g:{},sk:{},skOrder:[],en:[],bu:[],fx:[],tx:[],lobs:[],sorted:[],
     spawnAcc:0,swarmT:30,nextBoss:BOSS_EVERY,bossN:0,boss:null,fireT:0,fireFlash:0,aim:-Math.PI/2,kbStack:0,kbT:0,
-    activeCd:0,aimT:-Math.PI/2,nearest:999,rerolls:P('reroll'),shake:0,narrT:14,narrI:0,dying:null,adn:0,bossKills:0,idN:128440000+Math.floor(Math.random()*9000000)};
+    fz:{},activeCd:0,aimT:-Math.PI/2,nearest:999,rerolls:1+P('reroll'),shake:0,narrT:14,narrI:0,dying:null,adn:0,bossKills:0,idN:128440000+Math.floor(Math.random()*9000000)};
   R.pending=P('start');R.gb=geneBonus();
 }
 const G=id=>R.g[id]||0;
@@ -640,16 +762,16 @@ function spawnOne(){if(R.en.length>260)return;const [x,y]=edgePoint(Math.random(
 function spawnSwarm(){
   const a=Math.random()*TAU,n=Math.min(24,5+Math.floor(R.t/30));
   for(let i=0;i<n;i++){const [x,y]=edgePoint(a+rnd(-.18,.18),40+rnd(0,70));mkEnemy('swarm',x,y)}
-  narrate(`Một bầy ${n} tinh trùng non đang tới cùng lúc. Chúng chưa trưởng thành, nhưng rất đông.`);
+  narrate(L(`Một bầy ${n} tinh trùng non đang tới cùng lúc. Chúng chưa trưởng thành, nhưng rất đông.`,`A swarm of ${n} immature sperm is coming at once. Not grown up, but plenty of them.`));
 }
 function spawnBoss(){
-  R.bossN++;sfx('boss');const k=R.bossN;
+  R.bossN++;sfx('boss');const k=R.bossN,def=bossDef(k);
   const [x,y]=edgePoint(-Math.PI/2+rnd(-.6,.6),80);
   const e=mkEnemy('tank',x,y,0);
-  const hp=600*hpMul(R.t)*Math.pow(1.55,k-1);
-  Object.assign(e,{type:'boss',boss:true,hp,max:hp,r:44+5*Math.min(k,6),spd:14+1.5*k,xp:40+10*k,armor:0,spawnT:3,k,wobA:4});
+  const hp=600*hpMul(R.t)*Math.pow(1.55,k-1)*def.hp;
+  Object.assign(e,{type:'boss',boss:true,def,hp,max:hp,r:44+5*Math.min(k,6),spd:14+1.5*k,xp:40+10*k,armor:0,spawnT:3,st:4,mode:'hold',alpha:1,k,wobA:4});
   R.boss=e;
-  banner('Phát hiện nguồn cung',bossName(k),BOSSQ[Math.min(k,BOSSQ.length)-1]);
+  banner('Boss '+k+' · '+tr(def,'skill'),bossName(k),tr(def,'q'));
   $('bossWrap').hidden=false;$('bossTitle').textContent=bossName(k).toUpperCase();
 }
 
@@ -661,6 +783,7 @@ function hurt(e,dmg,src){
   let crit=false;
   if(src==='gun'&&Math.random()<critC()){dmg*=2.5*(1+R.gb.critd);crit=true}
   if(e.armor)dmg*=1-e.armor;
+  if(e.shield>0)dmg*=.25;
   e.hp-=dmg;e.flash=.07;
   if(crit)addText(e.x,e.y-e.r-4,Math.round(dmg),'#ffd08a',true);
   else if(e.boss&&Math.random()<.2)addText(e.x+rnd(-20,20),e.y-e.r*.6,Math.round(dmg),'#dfe7ea');
@@ -676,7 +799,7 @@ function kill(e){
   if(e.split){const n=R.t>200?3:2;const ob=Math.atan2(e.y,e.x);for(let i=0;i<n;i++){const a=ob+(i-(n-1)/2)*.9+rnd(-.2,.2);const m=mkEnemy('mini',e.x+Math.cos(a)*8,e.y+Math.sin(a)*8);m.kx=Math.cos(a)*150;m.ky=Math.sin(a)*150}}
   if(e.boss){
     R.boss=null;R.bossKills++;$('bossWrap').hidden=true;R.shake=.5;
-    banner('Nguồn cung bị vô hiệu',bossName(e.k).split(' · ')[0],'Nhận thêm 1 đột biến. Nó sẽ quay lại, mạnh hơn.',true);
+    banner(L('Đã hạ boss','Boss down'),bossName(e.k),L('Nhận thêm 1 đột biến. Con tiếp theo sẽ khác, và mạnh hơn.','One extra mutation. The next one is different, and stronger.'),true);
     R.pending++;
     fx({k:'ring',x:e.x,y:e.y,r:10,to:260,life:.7,max:.7,col:'230,240,245',w:5});
   }
@@ -712,6 +835,17 @@ const NARR=[
   'Tinh trùng không có mắt. Chúng tìm trứng bằng hóa chất và nhiệt độ. Bạn đang tỏa nhiệt.',
   'Nhà khoa học gọi đây là cạnh tranh tinh trùng. Bạn gọi đây là một ngày tồi tệ.',
   'Nếu bạn thua, 9 tháng sau sẽ có thêm một người. Người đó sẽ đọc dòng chữ này.',
+];
+const NARR_EN=[
+  'Each ejaculation carries roughly 200 to 300 million sperm. Only one needs to succeed. Bad news for you.',
+  'Sperm swim about 3 millimetres per minute. Slow, but extremely determined.',
+  'Cortical granules are real: the egg uses them to block a second sperm. Here they have to block the first one too.',
+  'About 90% of sperm are abnormally shaped. They still want in.',
+  'An egg lives only 12 to 24 hours after ovulation. You have a few minutes.',
+  'Only a few hundred ever get close to the egg. All of them are on your screen.',
+  'Sperm have no eyes. They find the egg by chemistry and heat. You are giving off heat.',
+  'Scientists call this sperm competition. You call it a bad day.',
+  'If you lose, in nine months there will be one more person. That person will read this sentence.',
 ];
 function narrate(t){const e=$('sub');e.textContent=t;e.classList.add('on');subT=5.5}
 let subT=0;
@@ -751,7 +885,7 @@ function auInit(){
   AU.next=c.currentTime+.5;
   setInterval(auTick,100);
   if(c.state!=='running')c.resume();
-  setTimeout(()=>{if(AU.on&&c.state!=='running')narrate('Trình duyệt đang chặn âm thanh. Chạm vào màn hình một lần để bật tiếng.')},900);
+  setTimeout(()=>{if(AU.on&&c.state!=='running')narrate(L('Trình duyệt đang chặn âm thanh. Chạm vào màn hình một lần để bật tiếng.','The browser is blocking sound. Tap the screen once to turn it on.'))},900);
 }
 function osc(type,f){const o=AU.c.createOscillator();o.type=type;o.frequency.value=f;return o}
 function gain(v){const g=AU.c.createGain();g.gain.value=v;return g}
@@ -853,7 +987,7 @@ renderSound();
 
 /* ---------- update ---------- */
 function update(dt){
-  R.t+=dt;
+  R.t+=dt;R.hype=!!(R.boss&&R.boss.def&&R.boss.def.id==='testo');
   R.spawnAcc+=spawnRate(R.t)*dt*(R.boss?.45:1);
   while(R.spawnAcc>=1){R.spawnAcc--;spawnOne()}
   if(R.t>100){R.swarmT-=dt;if(R.swarmT<=0){R.swarmT=rnd(22,32);spawnSwarm()}}
@@ -866,7 +1000,7 @@ function update(dt){
   updBullets(dt);updLobs(dt);updEnemies(dt);
   R.activeCd=Math.max(0,R.activeCd-dt);
   if(R.en.some(e=>e.dead))R.en=R.en.filter(e=>!e.dead);
-  R.narrT-=dt;if(R.narrT<=0){R.narrT=rnd(20,28);narrate(NARR[R.narrI++%NARR.length])}
+  R.narrT-=dt;if(R.narrT<=0){R.narrT=rnd(20,28);const ni=R.narrI++%NARR.length;narrate(L(NARR[ni],NARR_EN[ni]))}
 }
 function updGun(dt){
   // the player aims; the gun only turns toward the chosen direction
@@ -898,9 +1032,11 @@ function updBullets(dt){
       b.hit.push(e.id);
       if(e.dodge&&e.dodgeCd<=0&&e.stunT<=0&&e.frozenT<=0&&Math.random()<e.dodge){
         e.dodgeCd=1.3;const px=-b.vy,py=b.vx,l=Math.hypot(px,py)||1,s=Math.random()<.5?1:-1;
-        e.x+=px/l*14*s;e.y+=py/l*14*s;e.kx+=px/l*220*s;e.ky+=py/l*220*s;addText(e.x,e.y-e.r-4,'né','#aab4ff');continue;
+        e.x+=px/l*14*s;e.y+=py/l*14*s;e.kx+=px/l*220*s;e.ky+=py/l*220*s;addText(e.x,e.y-e.r-4,L('né','dodge'),'#aab4ff');continue;
       }
       hurt(e,b.dmg,b.src);
+      if(b.slow)e.slowT=Math.max(e.slowT,1.2);
+      if(b.spark){const hit=new Set([e]),pts=[[e.x,e.y]];let cur=e;for(let k=0;k<b.spark;k++){const nx=nearestFrom(cur.x,cur.y,90,hit);if(!nx)break;hit.add(nx);pts.push([nx.x,nx.y]);hurt(nx,b.dmg*.5,'zap');cur=nx}if(pts.length>1){fx({k:'bolt',pts,life:.14,max:.14});sfx('zap')}}
       if(b.pierce>0){b.pierce--;continue}
       b.life=0;break;
     }
@@ -914,11 +1050,11 @@ function updLobs(dt){
 function updEnemies(dt){
   for(const e of R.en){
     if(e.dead)continue;
-    e.flash-=dt;e.dodgeCd-=dt;e.slowT-=dt;e.frozenT-=dt;e.stunT-=dt;
+    e.flash-=dt;e.dodgeCd-=dt;e.slowT-=dt;e.frozenT-=dt;e.stunT-=dt;if(e.shield>0)e.shield-=dt;
     const d=e.d||1,ux=-e.x/d,uy=-e.y/d;
-    let sp=e.spd*(e.slowT>0?.5:1);
+    let sp=e.spd*(e.slowT>0?.5:1)*(R.hype&&!e.boss?1.3:1);
     if(e.frozenT>0||e.stunT>0)sp=0;
-    if(e.boss){e.age=(e.age||0)+dt;const stop=Math.max(0,ER+e.r+120-Math.max(0,e.age-25)*2.5);if(d<stop)sp=0}
+    if(e.boss){e.age=(e.age||0)+dt;const stop=Math.max(0,ER+e.r+120-Math.max(0,e.age-25)*2.5);if(d<stop||e.mode==='dash'||e.mode==='back')sp=0}
     e.wob+=dt*(e.type==='dodge'?5:2.5+sp/30);
     const w=Math.sin(e.wob)*e.wobA*(sp>0?1:0)*Math.min(1,(d-ER)/120);
     const vx=ux*sp+(-uy)*w+e.kx,vy=uy*sp+ux*w+e.ky;
@@ -926,17 +1062,51 @@ function updEnemies(dt){
     const k=Math.pow(.015,dt);e.kx*=k;e.ky*=k;
     if(sp>0||Math.abs(e.kx)+Math.abs(e.ky)>5){const ta=Math.atan2(uy*sp+ux*w,ux*sp+(-uy)*w);let da=ta-e.ang;da=Math.atan2(Math.sin(da),Math.cos(da));e.ang+=da*Math.min(1,dt*8)}
     e.ph+=dt*(sp>0?14+sp/5:3);
-    if(e.boss){
-      e.spawnT-=dt;
-      if(e.spawnT<=0){
-        e.spawnT=Math.max(2.2,4.6-.3*e.k);
-        const n=1+Math.min(4,e.k),mx=e.x+Math.cos(e.ang)*e.r*1.25,my=e.y+Math.sin(e.ang)*e.r*1.25;
-        for(let i=0;i<n;i++){const m=mkEnemy(Math.random()<.7?'basic':'fast',mx,my);const a=e.ang+(Math.random()<.5?1:-1)*rnd(.9,1.7);m.kx=Math.cos(a)*120;m.ky=Math.sin(a)*120}
-        e.recoil=.3;
-      }
-      if(e.recoil)e.recoil=Math.max(0,e.recoil-dt);
-    }
+    if(e.boss)bossSkill(e,dt,d,ux,uy);
     if(Math.hypot(e.x,e.y)<ER+e.r*(e.boss?.35:.4)){fertilize(e);return}
+  }
+}
+
+/* ---------- boss skills ---------- */
+function bossSkill(e,dt,d,ux,uy){
+  const id=e.def.id;e.st-=dt;
+  // every boss keeps adding minions; the cannon does it hardest
+  e.spawnT-=dt;
+  if(e.spawnT<=0&&!(e.blinkT>0)){
+    const big=id==='testes';
+    e.spawnT=big?Math.max(2.2,4.6-.3*e.k):6.5;
+    const n=big?1+Math.min(4,e.k):2,mx=e.x+Math.cos(e.ang)*e.r*1.25,my=e.y+Math.sin(e.ang)*e.r*1.25;
+    for(let i=0;i<n;i++){const m=mkEnemy(Math.random()<.7?'basic':'fast',mx,my);const a=e.ang+(Math.random()<.5?1:-1)*rnd(.9,1.7);m.kx=Math.cos(a)*120;m.ky=Math.sin(a)*120}
+    e.recoil=.3;
+  }
+  if(e.recoil)e.recoil=Math.max(0,e.recoil-dt);
+  if(id==='prostate'&&e.st<=0){
+    e.st=5;
+    for(const m of R.en)if(!m.boss&&!m.dead&&Math.hypot(m.x-e.x,m.y-e.y)<200)m.shield=3.2;
+    fx({k:'ring',x:e.x,y:e.y,r:e.r,to:200,life:.8,max:.8,col:'255,214,150',w:6});sfx('bomb');
+  }
+  if(id==='vesicle'){
+    if(e.mode==='hold'&&e.st<=0){e.mode='tele';e.teleT=1.1;e.hold=d}
+    else if(e.mode==='tele'){e.teleT-=dt;if(e.teleT<=0){e.mode='dash';e.dashLeft=Math.max(0,Math.min(140,d-ER-e.r-24));sfx('active')}}
+    else if(e.mode==='dash'){const v=340*dt;e.x+=ux*v;e.y+=uy*v;e.dashLeft-=v;R.shake=Math.max(R.shake,.12);if(e.dashLeft<=0)e.mode='back'}
+    else if(e.mode==='back'){e.x-=ux*75*dt;e.y-=uy*75*dt;if(Math.hypot(e.x,e.y)>=e.hold-2){e.mode='hold';e.st=5.5}}
+  }
+  if(id==='epid'){
+    if(e.blinkT>0){
+      e.blinkT-=dt;e.alpha=clamp(Math.abs(e.blinkT-.5)*2,0,1);
+      if(!e.moved&&e.blinkT<=.5){
+        e.moved=true;const a=Math.atan2(e.y,e.x)+(Math.random()<.5?1:-1)*rnd(1.3,2.4),r=Math.hypot(e.x,e.y);
+        e.x=Math.cos(a)*r;e.y=Math.sin(a)*r;e.ang=a+Math.PI;
+        for(let i=0;i<7;i++){const b=i/7*TAU;mkEnemy(i%3?'basic':'fast',e.x+Math.cos(b)*e.r*1.4,e.y+Math.sin(b)*e.r*1.4)}
+        fx({k:'ring',x:e.x,y:e.y,r:e.r*.4,to:e.r*1.8,life:.5,max:.5,col:'200,220,255',w:4});
+      }
+      if(e.blinkT<=0)e.alpha=1;
+    }else if(e.st<=0){e.st=7;e.blinkT=1;e.moved=false}
+  }
+  if(id==='testo'&&e.st<=0){
+    e.st=6;e.hp=Math.min(e.max,e.hp+e.max*.04);
+    for(let i=0;i<3;i++){const m=mkEnemy('fast',e.x,e.y);const a=e.ang+rnd(-1.2,1.2);m.kx=Math.cos(a)*140;m.ky=Math.sin(a)*140}
+    fx({k:'ring',x:e.x,y:e.y,r:e.r*.6,to:e.r*2.4,life:.7,max:.7,col:'255,190,140',w:5});
   }
 }
 
@@ -944,7 +1114,7 @@ function updEnemies(dt){
 const skDmg=id=>gunDmg()*(1+R.gb.skill)*(1+.12*(S.skl[id]||0));
 const SKU={
   jet(s,dt){
-    const n=1+s.lv.n;
+    const n=1+s.lv.n+(R.fz.fleet?2:0);
     while(s.drones.length<n){const a=Math.random()*TAU;s.drones.push({x:Math.cos(a)*60,y:Math.sin(a)*60,vx:Math.cos(a)*120,vy:Math.sin(a)*120,sh:rnd(0,.4),bomb:0,a,ph:Math.random()*9})}
     const dmg=skDmg('jet')*.55*(1+.5*s.lv.d);
     s.drones.forEach((dr,i)=>{
@@ -964,7 +1134,7 @@ const SKU={
         dr.sh-=dt;
         if(tg&&dr.sh<=0&&l<230){const fa=Math.atan2(dr.vy,dr.vx),ta=Math.atan2(dy,dx);if(Math.cos(fa-ta)>.6){dr.sh=.45;shoot(dr.x,dr.y,ta,560,{dmg,src:'jet',r:3.5,life:.7,spr:dotIce})}}
       }
-      if(s.ult){dr.bomb-=dt;if(dr.bomb<=0&&nearestFrom(dr.x,dr.y,70)){dr.bomb=1;const bx=dr.x,by=dr.y;R.lobs.push({t:0,dur:.25,x0:bx,y0:by,x1:bx,y1:by,cb:()=>explode(bx,by,58,dmg*2.4,'200,235,255')})}}
+      if(s.ult||R.fz.fleet){const fl=R.fz.fleet;dr.bomb-=dt;if(dr.bomb<=0&&nearestFrom(dr.x,dr.y,fl?110:70)){dr.bomb=fl?.45:1;const bx=dr.x,by=dr.y;R.lobs.push({t:0,dur:.25,x0:bx,y0:by,x1:bx,y1:by,ab:fl,small:true,cb:()=>explode(bx,by,fl?72:58,dmg*(fl?2.8:2.4),'200,235,255')})}}
     });
   },
   zap(s,dt){
@@ -985,11 +1155,11 @@ const SKU={
   laser(s,dt){
     s.segs=[];if(!R.sorted.length)return;
     const beams=1+s.lv.n,refr=s.lv.r,wid=4*(1+.3*s.lv.w)*(s.ult?2:1);
-    const dps=skDmg('laser')*.7*(1+.35*s.lv.w)*(s.ult?1.5:1);
+    const dps=skDmg('laser')*.7*(1+.35*s.lv.w)*(s.ult?1.5:1)*(R.fz.storm?1.5:1),tgs=[];
     for(let i=0;i<beams&&i<R.sorted.length;i++){
       let tg=R.sorted[i],x0=Math.cos(R.aim)*14,y0=Math.sin(R.aim)*14;const used=new Set();
       for(let k=0;k<=refr&&tg;k++){
-        used.add(tg);
+        used.add(tg);tgs.push(tg);
         const dx=tg.x-x0,dy=tg.y-y0,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
         const last=k===refr,ex=last?x0+ux*Math.max(L,900):tg.x,ey=last?y0+uy*Math.max(L,900):tg.y,SL=Math.hypot(ex-x0,ey-y0);
         for(const e of R.en){if(e.dead)continue;const px=e.x-x0,py=e.y-y0,pr=px*ux+py*uy;if(pr<0||pr>SL)continue;if(Math.abs(px*uy-py*ux)<wid/2+e.r*.8)hurt(e,dps*dt,'laser')}
@@ -997,6 +1167,11 @@ const SKU={
         x0=tg.x;y0=tg.y;tg=nearestFrom(x0,y0,220,used);
       }
     }
+    if(R.fz.storm){s.zt=(s.zt||0)-dt;if(s.zt<=0){s.zt=.6;const zd=skDmg('zap')*.9;
+      for(const t of tgs){if(t.dead)continue;const hit=new Set([t]),pts=[[t.x,t.y]];let cur=t;
+        for(let j=0;j<4;j++){const nx=nearestFrom(cur.x,cur.y,150,hit);if(!nx)break;hit.add(nx);pts.push([nx.x,nx.y]);hurt(nx,zd,'zap');cur=nx}
+        if(pts.length>1)fx({k:'bolt',pts,life:.18,max:.18})}
+      sfx('zap')}}
   },
   emp(s,dt){
     s.t-=dt;const rad=160*(1+.25*s.lv.r);
@@ -1006,6 +1181,7 @@ const SKU={
     const dmg=skDmg('emp')*2.2*(1+.55*s.lv.d);
     for(const e of R.en){if(e.dead||e.d>rad+e.r)continue;hurt(e,dmg,'emp');e.slowT=1.6;if(s.ult&&!e.boss)e.frozenT=1.5;if(!e.boss){const l=e.d||1;e.kx+=e.x/l*90;e.ky+=e.y/l*90}}
     fx({k:'wave',x:0,y:0,r:ER,to:rad,life:.6,max:.6});
+    if(R.fz.vortex){const sd=skDmg('spin')*.38*1.5*(1+.55*(R.sk.spin?R.sk.spin.lv.d:0));for(let k=0;k<24;k++){const a=k/24*TAU;shoot(Math.cos(a)*(ER+8),Math.sin(a)*(ER+8),a,420,{dmg:sd,src:'spin',r:3.5,life:1.1,slow:true,spr:dotIce})}}
   },
   bomb(s,dt){
     s.t-=dt;if(s.t>0||!R.sorted.length)return;s.t=2;
@@ -1019,16 +1195,16 @@ const SKU={
   },
   shot(s,dt){
     s.t-=dt;if(s.t>0||!R.sorted.length)return;s.t=1.3*Math.pow(.8,s.lv.c);
-    const tg=R.sorted[0],a0=Math.atan2(tg.y,tg.x),n=5+2*s.lv.n,dmg=skDmg('shot')*.75*(1+.55*s.lv.d);
-    for(let i=0;i<n;i++){const a=a0+(i/(n-1)-.5)*.62+rnd(-.03,.03);shoot(Math.cos(a)*ER*.6,Math.sin(a)*ER*.6,a,rnd(500,600),{dmg,src:'shot',r:3.5,life:.6,pierce:s.ult?99:0,spr:dotIce})}
+    const tg=R.sorted[0],a0=Math.atan2(tg.y,tg.x),n=5+2*s.lv.n,dmg=skDmg('shot')*.75*(1+.55*s.lv.d)*(R.fz.spark?1.4:1);
+    for(let i=0;i<n;i++){const a=a0+(i/(n-1)-.5)*.62+rnd(-.03,.03);shoot(Math.cos(a)*ER*.6,Math.sin(a)*ER*.6,a,rnd(500,600),{dmg,src:'shot',r:3.5,life:.6,pierce:s.ult?99:0,spark:R.fz.spark?2:0,spr:dotIce})}
   },
   spin(s,dt){
     const sp=1+.3*s.lv.s;s.a=(s.a||0)+dt*2.2*sp;s.t-=dt;
     if(s.t>0)return;s.t=.1/sp;
-    const n=1+s.lv.n,dmg=skDmg('spin')*.38*(1+.55*s.lv.d);
+    const n=1+s.lv.n,dmg=skDmg('spin')*.38*(1+.55*s.lv.d)*(R.fz.vortex?1.5:1),sl=!!R.fz.vortex;
     for(let k=0;k<n;k++){
-      const a=s.a+k*TAU/n;shoot(Math.cos(a)*(ER+8),Math.sin(a)*(ER+8),a,380,{dmg,src:'spin',r:3,life:1.1});
-      if(s.ult){const b=-s.a*1.1+k*TAU/n;shoot(Math.cos(b)*(ER+8),Math.sin(b)*(ER+8),b,380,{dmg,src:'spin',r:3,life:1.1,spr:dotIce})}
+      const a=s.a+k*TAU/n;shoot(Math.cos(a)*(ER+8),Math.sin(a)*(ER+8),a,380,{dmg,src:'spin',r:3,life:1.1,slow:sl});
+      if(s.ult){const b=-s.a*1.1+k*TAU/n;shoot(Math.cos(b)*(ER+8),Math.sin(b)*(ER+8),b,380,{dmg,src:'spin',r:3,life:1.1,slow:sl,spr:dotIce})}
     }
   },
 };
@@ -1046,35 +1222,38 @@ function useActive(){
 function cardPool(){
   const pool=[];
   for(const g of GUN)if(G(g.id)<g.max)pool.push({kind:'gun',id:g.id,w:g.id==='g_dmg'?1.4:1});
-  const held=R.skOrder.length;
+  const held=R.skOrder.length-Object.keys(R.fz).length;
   for(const id in SK){
     const s=R.sk[id];
     if(!s){if(held<MAX_SK&&S.load.includes(id))pool.push({kind:'new',id,w:held===0?2.2:1.1});continue}
     for(const u in SK[id].ups)if(s.lv[u]<SK[id].ups[u].max)pool.push({kind:'up',id,u,w:1.1});
     if(!s.ult&&upCount(s)>=3)pool.push({kind:'ult',id,w:2.5});
   }
+  for(const f of FUSE){const A=R.sk[f.a],B=R.sk[f.b];if(A&&B&&A.ult&&B.ult&&!A.fz&&!B.fz)pool.push({kind:'fuse',id:f.id,w:6})}
   return pool;
 }
 const upCount=s=>Object.values(s.lv).reduce((a,b)=>a+b,0);
 function drawCards(){
   const pool=cardPool(),out=[];
+  const fi=pool.findIndex(c=>c.kind==='fuse');if(fi>=0)out.push(pool.splice(fi,1)[0]);
   while(out.length<3&&pool.length){let s=0;pool.forEach(c=>s+=c.w);let r=Math.random()*s,i=0;for(;i<pool.length;i++){if((r-=pool[i].w)<=0)break}out.push(pool.splice(Math.min(i,pool.length-1),1)[0])}
   if(!out.length)out.push({kind:'gun',id:'g_dmg'});
   return out;
 }
 function cardInfo(c){
-  if(c.kind==='gun'){const g=GUN.find(x=>x.id===c.id);return{icon:c.id,kind:'Pháo Nhân',name:g.name,desc:g.desc,lv:G(c.id),max:g.max>10?0:g.max}}
+  if(c.kind==='fuse'){const f=FUSE.find(x=>x.id===c.id);return{icon:f.a,kind:L('Hợp nhất · ','Fusion · ')+tr(SK[f.a],'name')+' + '+tr(SK[f.b],'name'),name:tr(f,'name'),desc:tr(f,'desc'),lv:0,max:0}}
+  if(c.kind==='gun'){const g=GUN.find(x=>x.id===c.id);return{icon:c.id,kind:L('Pháo Nhân','Nucleus Cannon'),name:tr(g,'name'),desc:tr(g,'desc'),lv:G(c.id),max:g.max>10?0:g.max}}
   const d=SK[c.id];
-  if(c.kind==='new')return{icon:c.id,kind:'Vũ khí phụ mới',name:d.name,desc:d.desc,lv:0,max:0};
-  if(c.kind==='ult')return{icon:c.id,kind:'Tối thượng · '+d.name,name:d.ult.name,desc:d.ult.desc,lv:0,max:0};
-  const u=d.ups[c.u];return{icon:c.id,kind:d.name,name:u.name,desc:u.desc,lv:R.sk[c.id].lv[c.u],max:u.max};
+  if(c.kind==='new')return{icon:c.id,kind:L('Vũ khí phụ mới','New secondary weapon'),name:tr(d,'name'),desc:tr(d,'desc'),lv:0,max:0};
+  if(c.kind==='ult')return{icon:c.id,kind:L('Tối thượng · ','Ultimate · ')+tr(d,'name'),name:tr(d.ult,'name'),desc:tr(d.ult,'desc'),lv:0,max:0};
+  const u=d.ups[c.u];return{icon:c.id,kind:tr(d,'name'),name:tr(u,'name'),desc:tr(u,'desc'),lv:R.sk[c.id].lv[c.u],max:u.max};
 }
 let curCards=[];
 function openLevelUp(){
   state='levelup';sfx('lvl');curCards=drawCards();
   const first=R.t<1;
-  $('luSub').textContent=first?'Khởi đầu thuận lợi':'Đột biến có lợi';
-  $('luTitle').textContent=first?'Chọn đột biến ban đầu':`Tiến hóa · Cấp ${R.lvl-R.pending+1}`;
+  $('luSub').textContent=first?L('Khởi đầu thuận lợi','Head start'):L('Đột biến có lợi','Beneficial mutation');
+  $('luTitle').textContent=first?L('Chọn đột biến ban đầu','Pick a starting mutation'):L('Tiến hóa · Cấp ','Evolution · Level ')+(R.lvl-R.pending+1);
   renderCards();$('levelup').hidden=false;
 }
 function renderCards(){
@@ -1087,7 +1266,7 @@ function renderCards(){
     b.querySelector('.kind').textContent=f.kind;b.querySelector('h3').textContent=f.name;b.querySelector('p').textContent=f.desc;
     b.onclick=()=>pickCard(i);box.appendChild(b);
   });
-  const rb=$('rerollBtn');rb.textContent=`Đổi thẻ (${R.rerolls})`;rb.disabled=R.rerolls<=0;rb.hidden=P('reroll')===0;
+  const rb=$('rerollBtn');rb.textContent=L('Đổi thẻ','Reroll')+` (${R.rerolls})`;rb.disabled=R.rerolls<=0;
 }
 function pickCard(i){
   const c=curCards[i];if(!c||state!=='levelup')return;
@@ -1095,19 +1274,22 @@ function pickCard(i){
   else if(c.kind==='new'){const lv={};for(const u in SK[c.id].ups)lv[u]=0;R.sk[c.id]={lv,ult:false,t:0,drones:[],segs:[]};R.skOrder.push(c.id)}
   else if(c.kind==='up')R.sk[c.id].lv[c.u]++;
   else if(c.kind==='ult')R.sk[c.id].ult=true;
+  else if(c.kind==='fuse'){const f=FUSE.find(x=>x.id===c.id);R.fz[f.id]=true;R.sk[f.a].fz=f.id;R.sk[f.b].fz=f.id;banner(L('Hợp nhất','Fusion'),tr(f,'name'),tr(f,'desc'),true)}
   R.pending--;$('levelup').hidden=true;renderSlots();
   if(R.pending>0)openLevelUp();else{state='play';last=performance.now()}
 }
 $('rerollBtn').onclick=()=>{if(R.rerolls>0&&state==='levelup'){R.rerolls--;curCards=drawCards();renderCards()}};
 
 function renderSlots(){
-  const el=$('slots');el.innerHTML='';
-  for(let i=0;i<MAX_SK;i++){
-    const id=R.skOrder[i],d=document.createElement('div');
-    if(!id){d.className='slot empty';el.appendChild(d);continue}
-    const s=R.sk[id];d.className='slot'+(s.ult?' ult':'');d.title=SK[id].name;
-    d.innerHTML=svg(id)+`<b>${s.ult?'★':upCount(s)+1}</b>`;el.appendChild(d);
+  const el=$('slots');el.innerHTML='';const shown=new Set();let n=0;
+  for(const id of R.skOrder){
+    if(shown.has(id))continue;
+    const s=R.sk[id],d=document.createElement('div');
+    if(s.fz){const f=FUSE.find(x=>x.id===s.fz);shown.add(f.a);shown.add(f.b);d.className='slot fuse';d.title=tr(f,'name');d.innerHTML='<span class="fi">'+svg(f.a)+svg(f.b)+'</span><b>✦</b>'}
+    else{shown.add(id);d.className='slot'+(s.ult?' ult':'');d.title=tr(SK[id],'name');d.innerHTML=svg(id)+`<b>${s.ult?'★':upCount(s)+1}</b>`}
+    el.appendChild(d);n++;
   }
+  for(;n<MAX_SK;n++){const d=document.createElement('div');d.className='slot empty';el.appendChild(d)}
 }
 
 /* ---------- banner ---------- */
@@ -1144,6 +1326,21 @@ const ROAST_LATE=[
   'Bạn đã trì hoãn việc được sinh ra rất đáng nể. Tiếc là không ai trì hoãn được mãi.',
   'Chỉ một con thôi, và công sức của bạn đổ sông đổ biển. Đời là thế, em bé à.',
 ];
+const ROAST_EN=[[
+  'Fertilized before you even warmed up. A record for rushing, just like how you were born in real life.',
+  'The sperm had not even stretched yet. You had already lost.',
+  'Your parents were probably as surprised as you are right now.',
+],[
+  'Out of 250 million, you let exactly one through. In nine months the world gets one more bad gamer.',
+  'The baby is born. Future career: pressing Play Again.',
+  'This child will grow up asking, “Why was I born?” The answer: because you played badly.',
+  'Congratulations, you just created yourself. A perfect loop of failure.',
+  'Birth certificate, cause of birth: let one sperm through.',
+],[
+  'You held on this long and still had to be born like every other failure.',
+  'You postponed being born impressively. Sadly, nobody postpones it forever.',
+  'Just one got through, and all your effort went down the drain. That is life, baby.',
+]];
 function finishRun(){
   state='over';duck(.35,1);
   const secs=R.t;
@@ -1156,21 +1353,22 @@ function finishRun(){
   if(S.genes.length>80){const drop=S.genes.filter(g=>!S.equip.includes(g.id)).sort((a,b)=>a.r-b.r).slice(0,S.genes.length-80).map(g=>g.id);S.genes=S.genes.filter(g=>!drop.includes(g.id))}
   const rw=$('rewards');rw.innerHTML='';
   const add=(t,c)=>{const b=document.createElement('b');b.textContent=t;if(c)b.style.color=c;rw.appendChild(b)};
-  add('+'+stem+' tế bào gốc','#ffd08a');rw.appendChild(document.createTextNode(' · '+got.length+' gen mới: '));
-  got.sort((a,b)=>b.r-a.r).forEach((g,i)=>{if(i)rw.appendChild(document.createTextNode(', '));add(GENES[g.t].name+' ('+RAR[g.r].n+')',RAR[g.r].c)});
+  add('+'+stem+' '+L('tế bào gốc','stem cells'),'#ffd08a');rw.appendChild(document.createTextNode(' · '+got.length+' '+L('gen mới: ','new genes: ')));
+  got.sort((a,b)=>b.r-a.r).forEach((g,i)=>{if(i)rw.appendChild(document.createTextNode(', '));add(tr(GENES[g.t],'name')+' ('+tr(RAR[g.r],'n')+')',RAR[g.r].c)});
   const newBest=secs>S.best;if(newBest)S.best=secs;save();
-  const pool=secs<60?ROAST_EARLY:secs<300?ROAST_MID:ROAST_LATE;
+  const band=secs<60?0:secs<300?1:2,pool=LANG==='en'?ROAST_EN[band]:[ROAST_EARLY,ROAST_MID,ROAST_LATE][band];
   $('roast').textContent=pool[Math.random()*pool.length|0];
-  $('overTag').textContent=newBest?'Thụ tinh thành công · kỷ lục cá nhân mới':'Thụ tinh thành công';
+  $('overTag').textContent=L('Thụ tinh thành công','Fertilization successful')+(newBest?L(' · kỷ lục cá nhân mới',' · new personal best'):'');
   $('sTime').textContent=fmtT(secs);$('sKills').textContent=R.kills;$('sLv').textContent=R.lvl;$('sAdn').textContent='+'+adn;
   $('nameIn').value=S.name||randomName();
-  $('saveMsg').textContent=lbReady()?'Chỉ lưu kỷ lục tốt nhất của bạn.':'Đang kết nối bảng xếp hạng…';
+  $('saveMsg').textContent=lbReady()?L('Chỉ lưu kỷ lục tốt nhất của bạn.','Only your best run is kept.'):L('Đang kết nối bảng xếp hạng…','Connecting to the leaderboard…');
   $('saveBtn').disabled=false;renderBoard();sbLoadScores();
   $('hud').hidden=true;$('bottom').hidden=true;$('sub').classList.remove('on');$('over').hidden=false;
   drawUltrasound();
 }
 const NAMES=['Bé Lọt Lưới','Kẻ Được Sinh Ra','Trứng Thất Thủ','Bé Hậu Đậu','Tinh Trùng Số 1','Bé Chín Tháng','Người Thua Cuộc'];
-const randomName=()=>NAMES[Math.random()*NAMES.length|0]+' '+(100+Math.random()*900|0);
+const NAMES_EN=['Leaky Goalie','Born Anyway','Fallen Egg','Clumsy Baby','Sperm No. 1','Nine-Month Kid','Runner-Up'];
+const randomName=()=>{const n=LANG==='en'?NAMES_EN:NAMES;return n[Math.random()*n.length|0]+' '+(100+Math.random()*900|0)};
 
 /* ---------- ultrasound ---------- */
 let usBase=null;
@@ -1200,12 +1398,12 @@ function drawUltrasound(){
     }
     b.putImageData(img,0,0);
   }
-  const name=($('nameIn').value||'Vô danh').trim().slice(0,20);
+  const name=($('nameIn').value||L('Vô danh','Anonymous')).trim().slice(0,20);
   x.drawImage(usBase,0,0);
   x.fillStyle='#d8dde0';x.font='500 12px JetBrains Mono, monospace';x.textBaseline='top';
-  x.fillText('TRỨNG THỦ THÀNH  OB',10,8);x.fillText('GA 40w0d',10,24);
+  x.fillText('THU KHOA DAU THAI  OB',10,8);x.fillText('GA 40w0d',10,24);
   x.textAlign='right';x.fillText('EFW 3.2 kg',w-10,8);x.fillText('FHR 142 bpm',w-10,24);
-  x.textAlign='left';x.fillText('BN: '+name.toUpperCase(),10,h-20);
+  x.textAlign='left';x.fillText(L('BN: ','PT: ')+name.toUpperCase(),10,h-20);
   x.textAlign='right';x.fillText('T+ '+fmtT(R?R.t:0),w-10,h-20);x.textAlign='left';
 }
 $('nameIn').addEventListener('input',()=>{if(state==='over')drawUltrasound()});
@@ -1272,7 +1470,7 @@ async function sbInit(){
     cloudOk=true;
   }catch(e){console.warn('supabase',e)}
   updCloudNote();
-  if(state==='over'){$('saveBtn').disabled=false;$('saveMsg').textContent=lbReady()?'Chỉ lưu kỷ lục tốt nhất của bạn.':'Chưa kết nối được bảng xếp hạng.'}
+  if(state==='over'){$('saveBtn').disabled=false;$('saveMsg').textContent=lbReady()?L('Chỉ lưu kỷ lục tốt nhất của bạn.','Only your best run is kept.'):L('Chưa kết nối được bảng xếp hạng.','Could not reach the leaderboard.')}
   await sbLoadScores();
   setInterval(()=>{if(!$('boardPanel').hidden||!$('over').hidden)sbLoadScores()},20000);
 }
@@ -1297,15 +1495,15 @@ const lbReady=()=>!!(DB&&UID&&!lbReadOnly)||!!(SB.ok&&SB.uid);
     }
     if(DB){DB.collection('scores').orderBy('secs','desc').limit(50).onSnapshot(s=>{rows=s.docs.map(d=>Object.assign({id:d.id},d.data()));lbErr=false;renderBoard()},e=>{lbErr=(e&&e.code)||'lỗi';console.warn('scores',e);renderBoard()})}
     renderBoard();
-    if(state==='over'){$('saveBtn').disabled=!lbReady();$('saveMsg').textContent=lbReady()?'Chỉ lưu kỷ lục tốt nhất của bạn.':'Bạn chỉ xem được bảng xếp hạng.'}
+    if(state==='over'){$('saveBtn').disabled=!lbReady();$('saveMsg').textContent=lbReady()?L('Chỉ lưu kỷ lục tốt nhất của bạn.','Only your best run is kept.'):L('Bạn chỉ xem được bảng xếp hạng.','You can only view the leaderboard.')}
   }catch(e){renderBoard()}
 })();
 function boardRow(r,i){
   const li=document.createElement('li');if(r.id===UID)li.className='me';
   li.innerHTML='<span class="rk"></span><span class="nm"><span></span><small></small></span><span class="tm"></span>';
   li.querySelector('.rk').textContent=String(i+1).padStart(2,'0');
-  li.querySelector('.nm span').textContent=String(r.name||'Vô danh').slice(0,20);
-  li.querySelector('small').textContent=(r.kills||0)+' hạ · cấp '+(r.level||1)+' · '+(r.bosses||0)+' boss'+(r.id===UID?' · bạn':'');
+  li.querySelector('.nm span').textContent=String(r.name||L('Vô danh','Anonymous')).slice(0,20);
+  li.querySelector('small').textContent=(r.kills||0)+L(' hạ · cấp ',' kills · lvl ')+(r.level||1)+' · '+(r.bosses||0)+' boss'+(r.id===UID?L(' · bạn',' · you'):'');
   li.querySelector('.tm').textContent=fmtT(r.secs);
   return li;
 }
@@ -1320,27 +1518,27 @@ function renderBoard(){
   list.forEach((r,i)=>ol.appendChild(boardRow(r,i)));
   if(outside)ol.appendChild(boardRow(SB.myRow,SB.myRank-1));
   let note='';
-  if(!DB&&!SB.ok)note='Đang kết nối bảng xếp hạng… Nếu lâu quá, kiểm tra mạng rồi mở lại trang. Kỷ lục trên máy này: '+(S.best?fmtT(S.best):'chưa có')+'.';
-  else if(lbErr)note='Không tải được bảng xếp hạng ('+lbErr+'). Thử mở lại trang.';
-  else if(!list.length)note='Chưa ai lên bảng. Thua một ván rồi lưu tên để thành người đầu tiên.';
-  else note='Xếp theo thời gian cầm cự. Mỗi người giữ một dòng là kỷ lục tốt nhất.'+(SB.ok&&SB.total?' Tổng cộng '+SB.total+' người chơi'+(SB.myRank?', bạn đứng hạng '+SB.myRank+'.':'.'):'');
+  if(!DB&&!SB.ok)note=L('Đang kết nối bảng xếp hạng… Nếu lâu quá, kiểm tra mạng rồi mở lại trang. Kỷ lục trên máy này: ','Connecting to the leaderboard… If it takes too long, check your connection and reload. Best on this device: ')+(S.best?fmtT(S.best):L('chưa có','none'))+'.';
+  else if(lbErr)note=L('Không tải được bảng xếp hạng (','Could not load the leaderboard (')+lbErr+L('). Thử mở lại trang.','). Try reloading.');
+  else if(!list.length)note=L('Chưa ai lên bảng. Thua một ván rồi lưu tên để thành người đầu tiên.','Nobody is on the board yet. Lose a run and save your name to be the first.');
+  else note=L('Xếp theo thời gian cầm cự. Mỗi người giữ một dòng là kỷ lục tốt nhất.','Ranked by survival time. Each player keeps one row with their best run.')+(SB.ok&&SB.total?L(' Tổng cộng ',' ')+SB.total+L(' người chơi',' players in total')+(SB.myRank?L(', bạn đứng hạng ',', you are #')+SB.myRank+'.':'.'):'');
   $('boardNote').textContent=note;
 }
 $('nameForm').addEventListener('submit',async ev=>{
   ev.preventDefault();
   const name=$('nameIn').value.trim().replace(/\s+/g,' ').slice(0,20);
-  if(!name){$('saveMsg').textContent='Nhập một cái tên đã, dù là tên xấu.';return}
+  if(!name){$('saveMsg').textContent=L('Nhập một cái tên đã, dù là tên xấu.','Enter a name first, even a bad one.');return}
   S.name=name;save();drawUltrasound();
-  if(!lbReady()){$('saveMsg').textContent=DB?'Chưa xác định được tài khoản của bạn, thử tải lại trang.':'Chưa kết nối được bảng xếp hạng. Kiểm tra mạng rồi bấm lại. Tên đã lưu trên máy này.';if(!DB&&!SB.ok)sbInit();return}
-  const btn=$('saveBtn');btn.disabled=true;$('saveMsg').textContent='Đang lưu…';
+  if(!lbReady()){$('saveMsg').textContent=DB?L('Chưa xác định được tài khoản của bạn, thử tải lại trang.','Could not identify your account, try reloading.'):L('Chưa kết nối được bảng xếp hạng. Kiểm tra mạng rồi bấm lại. Tên đã lưu trên máy này.','Could not reach the leaderboard. Check your connection and try again. Your name is saved on this device.');if(!DB&&!SB.ok)sbInit();return}
+  const btn=$('saveBtn');btn.disabled=true;$('saveMsg').textContent=L('Đang lưu…','Saving…');
   if(SB.ok){
     try{
       const rec={user_id:SB.uid,name,secs:Math.round(R.t*10)/10,kills:R.kills,level:R.lvl,bosses:R.bossKills};
       const row=(await (await sbFetch('/rest/v1/scores?on_conflict=user_id',{method:'POST',headers:{prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify(rec)})).json())[0];
       await sbLoadScores();
-      const rk=SB.myRank?` Bạn đứng hạng ${SB.myRank}${SB.total?' trên '+SB.total+' người':''} về khoản trì hoãn chào đời.`:'';
-      $('saveMsg').textContent=row&&row.secs>rec.secs+.05?`Đã đổi tên. Kỷ lục cũ ${fmtT(row.secs)} vẫn tốt hơn ván này.${rk}`:'Đã lưu.'+rk;
-    }catch(e){console.warn('save score',e);$('saveMsg').textContent='Lưu chưa được ('+(e.code||e.message||'lỗi')+'). Thử bấm lại.'}
+      const rk=SB.myRank?L(` Bạn đứng hạng ${SB.myRank}${SB.total?' trên '+SB.total+' người':''} về khoản trì hoãn chào đời.`,` You rank #${SB.myRank}${SB.total?' of '+SB.total:''} at postponing birth.`):'';
+      $('saveMsg').textContent=row&&row.secs>rec.secs+.05?L(`Đã đổi tên. Kỷ lục cũ ${fmtT(row.secs)} vẫn tốt hơn ván này.`,`Name updated. Your old best ${fmtT(row.secs)} still beats this run.`)+rk:L('Đã lưu.','Saved.')+rk;
+    }catch(e){console.warn('save score',e);$('saveMsg').textContent=L('Lưu chưa được (','Could not save (')+(e.code||e.message||'error')+L('). Thử bấm lại.','). Try again.')}
     btn.disabled=false;return;
   }
   try{
@@ -1348,12 +1546,12 @@ $('nameForm').addEventListener('submit',async ev=>{
     const rec={name,secs:Math.round(R.t*10)/10,kills:R.kills,level:R.lvl,bosses:R.bossKills,at:Date.now()};
     if(!old||rec.secs>(old.secs||0)){await ref.set(rec);
       const rank=rows.filter(r=>r.id!==UID&&r.secs>rec.secs).length+1;
-      $('saveMsg').textContent=`Đã lưu. Bạn đứng hạng ${rank} về khoản trì hoãn chào đời.`;}
-    else{await ref.update({name});$('saveMsg').textContent=`Đã đổi tên. Kỷ lục cũ ${fmtT(old.secs)} vẫn tốt hơn ván này.`}
+      $('saveMsg').textContent=L(`Đã lưu. Bạn đứng hạng ${rank} về khoản trì hoãn chào đời.`,`Saved. You rank #${rank} at postponing birth.`);}
+    else{await ref.update({name});$('saveMsg').textContent=L(`Đã đổi tên. Kỷ lục cũ ${fmtT(old.secs)} vẫn tốt hơn ván này.`,`Name updated. Your old best ${fmtT(old.secs)} still beats this run.`)}
   }catch(e){
     console.warn('save score',e);
-    if(e&&e.code==='invalid_argument'){$('saveMsg').textContent='Không lưu được: tài khoản này chỉ có quyền xem (mã invalid_argument).';btn.disabled=false}
-    else{$('saveMsg').textContent='Lưu chưa được ('+((e&&e.code)||(e&&e.message)||'lỗi')+'). Thử bấm lại.';btn.disabled=false}
+    if(e&&e.code==='invalid_argument'){$('saveMsg').textContent=L('Không lưu được: tài khoản này chỉ có quyền xem.','Cannot save: this account is view-only.');btn.disabled=false}
+    else{$('saveMsg').textContent=L('Lưu chưa được (','Could not save (')+((e&&e.code)||(e&&e.message)||'error')+L('). Thử bấm lại.','). Try again.');btn.disabled=false}
   }
 });
 
@@ -1384,7 +1582,11 @@ function drawWorld(T){
   // sperm
   for(const e of R.en){if(e.dead||e.boss)continue;const cul=dying&&e===dying.e;ctx.globalAlpha=cul?1:fade;if(ctx.globalAlpha>.02)drawSperm(e)}
   ctx.globalAlpha=fade;
-  if(R.boss&&!R.boss.dead)drawBoss(R.boss,T);
+  if(R.boss&&!R.boss.dead){
+    const b=R.boss;
+    if(b.mode==='tele'&&!dying){ctx.save();ctx.strokeStyle=`rgba(255,70,70,${.35+.35*Math.sin(T*24)})`;ctx.lineWidth=b.r*.5;ctx.setLineDash([10,10]);ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(0,0);ctx.stroke();ctx.restore()}
+    drawBoss(b,T);
+  }
   ctx.globalAlpha=1;
   // bullets
   for(const b of R.bu){const s=Math.min(b.r,4.5)*4.2;ctx.drawImage(b.spr,b.x-s/2,b.y-s/2,s,s)}
@@ -1415,6 +1617,7 @@ function drawSperm(e){
   ctx.drawImage(spr,-84*s,-40*s,128*s,80*s);
   if(e.flash>0)ctx.drawImage(spr,-84*s,-40*s,128*s,80*s);
   if(e.frozenT>0){ctx.fillStyle='rgba(120,190,255,.18)';ctx.beginPath();ctx.arc(0,0,r*1.4,0,TAU);ctx.fill()}
+  if(e.shield>0){ctx.strokeStyle='rgba(255,214,150,.55)';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(0,0,r*1.45,0,TAU);ctx.stroke()}
   ctx.restore();
   if(e.stunT>0){ctx.fillStyle='rgba(185,226,255,.8)';for(let i=0;i<3;i++){const a=performance.now()/180+i*2.1;ctx.fillRect(e.x+Math.cos(a)*r*1.2-1,e.y+Math.sin(a)*r*1.2-1,2,2)}}
   if((e.type==='tank'||e.type==='helmet')&&e.hp<e.max){const w=r*2;ctx.fillStyle='rgba(255,255,255,.14)';ctx.fillRect(e.x-w/2,e.y+r+5,w,1.5);ctx.fillStyle='rgba(255,255,255,.75)';ctx.fillRect(e.x-w/2,e.y+r+5,w*Math.max(0,e.hp/e.max),1.5)}
@@ -1435,6 +1638,11 @@ function drawEgg(T,dying){
   }
 }
 function drawBoss(e,T){
+  const id=e.def?e.def.id:'testes';
+  if(id==='prostate')return drawProstate(e,T);
+  if(id==='vesicle')return drawVesicle(e,T);
+  if(id==='epid')return drawEpid(e,T);
+  if(id==='testo')return drawTesto(e,T);
   const R0=e.r,rc=(e.recoil||0)*R0*.35,pul=1+Math.sin(T*2.2)*.02;
   ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.ang);ctx.scale(pul,pul);
   // duct: translucent tube with rippling walls, pointing at the egg
@@ -1452,6 +1660,68 @@ function drawBoss(e,T){
   // two spheres
   for(const s of [-1,1]){const r=R0*.62,cx=-R0*.5,cy=s*R0*.5;ctx.save();ctx.translate(cx,cy);ctx.rotate(T*.1*s);ctx.drawImage(sphereSpr,-r,-r,r*2,r*2);ctx.restore()}
   if(e.flash>0){ctx.globalAlpha*=.25;for(const s of [-1,1]){const r=R0*.62;ctx.drawImage(sphereSpr,-R0*.5-r,s*R0*.5-r,r*2,r*2)}}
+  ctx.restore();
+}
+function drawProstate(e,T){
+  const R0=e.r;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.ang);
+  const path=()=>{ctx.beginPath();for(let i=0;i<=56;i++){const th=i/56*TAU,rr=R0*(1+.14*Math.cos(2*th)+.05*Math.sin(5*th+T*1.4)+.035*Math.sin(9*th));const x=Math.cos(th)*rr*.92,y=Math.sin(th)*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath()};
+  path();ctx.fillStyle='rgba(230,214,204,.07)';ctx.fill();
+  ctx.save();path();ctx.clip();ctx.drawImage(sphereSpr,-R0*1.15,-R0*1.15,R0*2.3,R0*2.3);
+  for(let i=0;i<16;i++){const a=i*2.3,r=R0*(.22+((i*37)%10)/10*.6);ctx.strokeStyle='rgba(245,232,222,.2)';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r,R0*(.09+(i%3)*.04),0,TAU);ctx.stroke()}
+  ctx.restore();
+  path();ctx.strokeStyle='rgba(245,232,222,.55)';ctx.lineWidth=2.2;ctx.stroke();
+  // urethral channel running through the gland
+  ctx.strokeStyle='rgba(255,236,210,.45)';ctx.lineWidth=R0*.11;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-R0*1.1,0);ctx.bezierCurveTo(-R0*.3,-R0*.18,R0*.3,R0*.18,R0*1.18,0);ctx.stroke();
+  const p=clamp(e.st/5,0,1);ctx.strokeStyle=`rgba(255,214,150,${.12+(1-p)*.45})`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,R0*1.28,0,TAU);ctx.stroke();
+  if(e.flash>0){ctx.globalAlpha*=.3;path();ctx.fillStyle='#fff';ctx.fill()}
+  ctx.restore();
+}
+function drawVesicle(e,T){
+  const R0=e.r;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.ang);
+  const pts=[];for(let i=0;i<=12;i++){const f=i/12;pts.push([-R0*1.15+f*R0*2.25,Math.sin(f*Math.PI*2.6+T*(e.mode==='dash'?9:2))*R0*.46*(1-f*.35),R0*(.46-f*.2)])}
+  ctx.strokeStyle='rgba(240,228,232,.18)';ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=R0*.62;
+  ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
+  for(const [x,y,r] of pts)ctx.drawImage(sphereSpr,x-r,y-r,r*2,r*2);
+  ctx.strokeStyle='rgba(250,238,242,.4)';ctx.lineWidth=1.6;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
+  const tip=pts[pts.length-1];ctx.strokeStyle='rgba(255,240,244,.7)';ctx.lineWidth=2.2;ctx.beginPath();ctx.arc(tip[0],tip[1],R0*.2,0,TAU);ctx.stroke();
+  if(e.mode==='tele'){ctx.fillStyle=`rgba(255,80,80,${.12+.12*Math.sin(T*30)})`;ctx.beginPath();ctx.arc(0,0,R0*1.3,0,TAU);ctx.fill()}
+  if(e.flash>0){ctx.globalAlpha*=.3;for(const [x,y,r] of pts)ctx.drawImage(sphereSpr,x-r,y-r,r*2,r*2)}
+  ctx.restore();
+}
+function drawEpid(e,T){
+  const R0=e.r;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.ang);ctx.globalAlpha*=e.alpha==null?1:e.alpha;
+  // caput (head) facing the egg, body and tail curling back
+  const seg=18,P=[];for(let i=0;i<=seg;i++){const f=i/seg,a=f*Math.PI*1.35;P.push([R0*.45-f*R0*1.5,Math.sin(a)*R0*.95-f*R0*.2,R0*(.58-f*.46)])}
+  for(let i=P.length-1;i>=0;i--){const [x,y,r]=P[i];ctx.drawImage(sphereSpr,x-r,y-r,r*2,r*2)}
+  // coiled duct visible inside
+  ctx.strokeStyle='rgba(235,240,255,.35)';ctx.lineWidth=1.2;ctx.beginPath();
+  for(let i=0;i<=120;i++){const f=i/120,j=Math.min(seg,f*seg),a=Math.floor(j),b=Math.min(seg,a+1),t=j-a,x=P[a][0]+(P[b][0]-P[a][0])*t,y=P[a][1]+(P[b][1]-P[a][1])*t,r=P[a][2]*.55,o=Math.sin(f*70+T*3)*r;i?ctx.lineTo(x+o*.6,y+o):ctx.moveTo(x,y)}
+  ctx.stroke();
+  if(e.flash>0){ctx.globalAlpha*=.3;ctx.drawImage(sphereSpr,P[0][0]-P[0][2],P[0][1]-P[0][2],P[0][2]*2,P[0][2]*2)}
+  ctx.restore();
+}
+function drawTesto(e,T){
+  // testosterone: four fused rings (A, B, C hexagons + D pentagon), =O and –OH groups
+  const R0=e.r,a=R0*.34,h=a*Math.sqrt(3)/2;
+  ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.ang+Math.sin(T*.6)*.3);
+  const pulse=.5+.5*Math.sin(T*4);
+  const g=ctx.createRadialGradient(0,0,R0*.3,0,0,R0*1.6);g.addColorStop(0,`rgba(255,180,120,${.1+.08*pulse})`);g.addColorStop(1,'rgba(255,180,120,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,R0*1.6,0,TAU);ctx.fill();
+  // fused rings share edges: A|B side by side, C up-right of B, pentagon D on C's right edge
+  const ox=-2.3*h,oy=.6*a;
+  const hex=(cx,cy)=>{const p=[];for(let i=0;i<6;i++){const t=Math.PI/6+i*Math.PI/3;p.push([ox+cx+Math.cos(t)*a,oy+cy+Math.sin(t)*a])}return p};
+  const A=hex(0,0),B=hex(2*h,0),C=hex(3*h,-1.5*a);
+  const P1=C[5],P2=C[0],pc=[(P1[0]+P2[0])/2+.688*a,(P1[1]+P2[1])/2],pr=.8507*a,D=[];
+  for(let k=0;k<5;k++){const t=Math.PI+Math.PI/5+k*2*Math.PI/5;D.push([pc[0]+Math.cos(t)*pr,pc[1]+Math.sin(t)*pr])}
+  const ring=p=>{ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath()};
+  for(const p of [A,B,C,D]){ring(p);ctx.fillStyle='rgba(255,220,190,.05)';ctx.fill()}
+  ctx.lineJoin='round';
+  for(const [w,c] of [[7,`rgba(255,190,140,${.18+.12*pulse})`],[2.2,'rgba(255,240,225,.9)']]){ctx.strokeStyle=c;ctx.lineWidth=w;for(const p of [A,B,C,D]){ring(p);ctx.stroke()}}
+  // =O on ring A, –OH on ring D
+  const o1=A[2],o2=[o1[0]-a*.8,o1[1]+a*.3];ctx.strokeStyle='rgba(255,240,225,.9)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(o1[0],o1[1]-2);ctx.lineTo(o2[0],o2[1]-2);ctx.moveTo(o1[0],o1[1]+2);ctx.lineTo(o2[0],o2[1]+2);ctx.stroke();
+  const d2=D[2],oh=[d2[0]+a*.7,d2[1]];ctx.beginPath();ctx.moveTo(d2[0],d2[1]);ctx.lineTo(oh[0],oh[1]);ctx.stroke();
+  ctx.fillStyle='rgba(255,240,225,.95)';ctx.font=`700 ${Math.round(a*.55)}px "JetBrains Mono", monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('O',o2[0]-a*.25,o2[1]);ctx.fillText('OH',oh[0]+a*.35,oh[1]-a*.15);
+  if(e.flash>0){ctx.globalAlpha*=.4;ctx.fillStyle='#fff';for(const p of [A,B,C,D]){ring(p);ctx.fill()}}
   ctx.restore();
 }
 function drawMacro(dr,T,ult){
@@ -1517,11 +1787,11 @@ function drawHome(T){
 
 /* ---------- dying: fertilisation then cleavage ---------- */
 const CLV=[
-  {t:1.5,label:'HỢP TỬ · 0 GIỜ',cells:[[0,0,.82]]},
-  {t:2.2,label:'2 TẾ BÀO · 30 GIỜ',cells:[[-.4,0,.46],[.4,0,.46]]},
-  {t:2.9,label:'4 TẾ BÀO · 2 NGÀY',cells:[[-.38,-.36,.38],[.38,-.36,.38],[-.38,.36,.38],[.38,.36,.38]]},
-  {t:3.6,label:'8 TẾ BÀO · 3 NGÀY',cells:[...Array(8)].map((_,i)=>{const a=i/8*TAU+.3;return[Math.cos(a)*.5,Math.sin(a)*.5,.28]})},
-  {t:4.3,label:'PHÔI DÂU · 4 NGÀY',cells:[...Array(18)].map((_,i)=>{const a=i*2.4,r=Math.sqrt((i+.5)/18)*.62;return[Math.cos(a)*r,Math.sin(a)*r,.2]})},
+  {t:1.5,label:'HỢP TỬ · 0 GIỜ',label_en:'ZYGOTE · 0 H',cells:[[0,0,.82]]},
+  {t:2.2,label:'2 TẾ BÀO · 30 GIỜ',label_en:'2 CELLS · 30 H',cells:[[-.4,0,.46],[.4,0,.46]]},
+  {t:2.9,label:'4 TẾ BÀO · 2 NGÀY',label_en:'4 CELLS · DAY 2',cells:[[-.38,-.36,.38],[.38,-.36,.38],[-.38,.36,.38],[.38,.36,.38]]},
+  {t:3.6,label:'8 TẾ BÀO · 3 NGÀY',label_en:'8 CELLS · DAY 3',cells:[...Array(8)].map((_,i)=>{const a=i/8*TAU+.3;return[Math.cos(a)*.5,Math.sin(a)*.5,.28]})},
+  {t:4.3,label:'PHÔI DÂU · 4 NGÀY',label_en:'MORULA · DAY 4',cells:[...Array(18)].map((_,i)=>{const a=i*2.4,r=Math.sqrt((i+.5)/18)*.62;return[Math.cos(a)*r,Math.sin(a)*r,.2]})},
 ];
 function updDying(dt){
   const d=R.dying;d.t+=dt;updFx(dt);
@@ -1554,9 +1824,9 @@ function drawDying(T){
   ctx.globalCompositeOperation='source-over';
   ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.font='700 11px "JetBrains Mono", monospace';
-  const lab=k<.3?'':k<1.5?'THỤ TINH · SÓNG CANXI':st?st.label:'';
+  const lab=k<.3?'':k<1.5?L('THỤ TINH · SÓNG CANXI','FERTILIZATION · CALCIUM WAVE'):st?tr(st,'label'):'';
   if(lab){ctx.fillStyle='rgba(230,238,242,.9)';ctx.fillText(lab,0,ER+44)}
-  if(k<1.5){ctx.fillStyle='rgba(255,75,75,.95)';ctx.fillText('● TINH TRÙNG #'+R.idN.toLocaleString('vi-VN')+' ĐÃ VÀO',0,-ER-44)}
+  if(k<1.5){ctx.fillStyle='rgba(255,75,75,.95)';ctx.fillText(L('● TINH TRÙNG #','● SPERM #')+R.idN.toLocaleString(LANG==='en'?'en-US':'vi-VN')+L(' ĐÃ VÀO',' IS IN'),0,-ER-44)}
   // fade to black at the end
   if(k>4.7){ctx.globalAlpha=clamp((k-4.7)/.6,0,1);ctx.fillStyle='#000';ctx.fillRect(-VW-60,-VH-60,VW*2+120,VH*2+120);ctx.globalAlpha=1}
 }
@@ -1567,12 +1837,12 @@ function updHud(dt){
   hudT-=dt;if(hudT>0)return;hudT=.1;
   $('tTime').textContent=fmtRec(R.t);
   $('tKills').textContent=R.kills;
-  $('tBoss').textContent=R.boss?'nguồn cung đang tấn công':'boss sau '+fmtRec(R.nextBoss-R.t).slice(0,5);
-  const n=need(R.lvl);$('xpBar').style.width=(R.xp/n*100).toFixed(1)+'%';$('xpTxt').textContent=`CẤP ${R.lvl} · ${Math.floor(R.xp)}/${n}`;
+  $('tBoss').textContent=R.boss?L('boss đang tấn công','boss attacking'):L('boss sau ','boss in ')+fmtRec(R.nextBoss-R.t).slice(0,5);
+  const n=need(R.lvl);$('xpBar').style.width=(R.xp/n*100).toFixed(1)+'%';$('xpTxt').textContent=L('CẤP ','LVL ')+`${R.lvl} · ${Math.floor(R.xp)}/${n}`;
   const nd=R.en.reduce((m,e)=>e.dead?m:Math.min(m,e.d-ER-e.r*.4),1e9);
-  R.nearest=nd;$('warn').textContent=nd<45?`⚠ cách màng ${Math.max(0,nd*UM).toFixed(0)} µm`:'';
+  R.nearest=nd;$('warn').textContent=nd<45?L('⚠ cách màng ','⚠ ')+Math.max(0,nd*UM).toFixed(0)+L(' µm',' µm from membrane'):'';
   if(R.boss){const p=Math.max(0,R.boss.hp/R.boss.max);$('bossFill').style.width=(p*100).toFixed(1)+'%';$('bossPct').textContent=Math.ceil(p*100)+'%'}
-  const cd=R.activeCd,mx=activeMax(),ab=$('activeBtn');ab.disabled=cd>0;$('activeTxt').textContent=cd>0?Math.ceil(cd)+'s':'sẵn sàng';
+  const cd=R.activeCd,mx=activeMax(),ab=$('activeBtn');ab.disabled=cd>0;$('activeTxt').textContent=cd>0?Math.ceil(cd)+'s':L('sẵn sàng','ready');
   const c=$('activeCd').getContext('2d');c.clearRect(0,0,176,176);
   if(cd>0){c.strokeStyle='rgba(185,226,255,.8)';c.lineWidth=4;c.beginPath();c.arc(88,88,85,-Math.PI/2,-Math.PI/2+TAU*(1-cd/mx));c.stroke()}
 }
@@ -1585,18 +1855,18 @@ function startGame(){
   $('speedBtn').textContent='×'+S.speed;
   renderSlots();state='play';last=performance.now();
   if(R.pending>0)openLevelUp();
-  narrate(matchMedia('(pointer:coarse)').matches?'Chạm và kéo ngón tay quanh trứng để xoay Pháo Nhân. Súng tự bắn liên tục theo hướng bạn chỉ.':'Di chuột để xoay Pháo Nhân (hoặc A/D, ←/→). Súng tự bắn liên tục theo hướng bạn chỉ.');R.narrT=9;
+  narrate(matchMedia('(pointer:coarse)').matches?L('Chạm và kéo ngón tay quanh trứng để xoay Pháo Nhân. Súng tự bắn liên tục theo hướng bạn chỉ.','Touch and drag around the egg to turn the Nucleus Cannon. It fires nonstop wherever you point.'):L('Di chuột để xoay Pháo Nhân (hoặc A/D, ←/→). Súng tự bắn liên tục theo hướng bạn chỉ.','Move the mouse to turn the Nucleus Cannon (or A/D, ←/→). It fires nonstop wherever you point.'));R.narrT=9;
 }
 function goHome(){
   state='home';R=null;duck(1,1.5);
   ['over','levelup','pause','boardPanel','evoPanel','helpPanel'].forEach(id=>$(id).hidden=true);
   $('hud').hidden=true;$('bottom').hidden=true;$('banner').innerHTML='';$('sub').classList.remove('on');$('home').hidden=false;refreshHome();
 }
-function refreshHome(){$('adnHome').textContent=S.adn;$('stemHome').textContent=S.stem;$('bestHome').textContent='kỷ lục '+(S.best?fmtT(S.best):'–')}
+function refreshHome(){$('adnHome').textContent=S.adn;$('stemHome').textContent=S.stem;$('bestHome').textContent=L('kỷ lục ','best ')+(S.best?fmtT(S.best):'–')}
 function pause(){if(state!=='play')return;state='paused';
   const pb=$('pauseBuild');pb.innerHTML='';
-  const items=[...GUN.filter(g=>G(g.id)).map(g=>[g.id,g.name+' ×'+G(g.id)]),...R.skOrder.map(id=>[id,SK[id].name+(R.sk[id].ult?' ★':' '+(upCount(R.sk[id])+1))])];
-  if(!items.length)pb.innerHTML='<span class="note" style="margin:0">Chưa có đột biến nào.</span>';
+  const items=[...GUN.filter(g=>G(g.id)).map(g=>[g.id,tr(g,'name')+' ×'+G(g.id)]),...R.skOrder.map(id=>[id,tr(SK[id],'name')+(R.sk[id].ult?' ★':' '+(upCount(R.sk[id])+1))]),...FUSE.filter(f=>R.fz[f.id]).map(f=>[f.a,'✦ '+tr(f,'name')])];
+  if(!items.length)pb.innerHTML='<span class="note" style="margin:0">'+L('Chưa có đột biến nào.','No mutations yet.')+'</span>';
   for(const [ic,t] of items){const s=document.createElement('span');s.style.cssText='display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;font-size:12.5px;border:1px solid var(--line2);border-radius:6px;color:var(--ink)';s.innerHTML=`<span style="width:18px;height:18px;display:inline-block;color:var(--ice)">${svg(ic)}</span>`;s.appendChild(document.createTextNode(t));pb.appendChild(s)}
   $('pause').hidden=false}
 function resume(){if(state!=='paused')return;$('pause').hidden=true;state='play';last=performance.now()}
@@ -1628,16 +1898,16 @@ function renderWpn(){
     const d=SK[id],un=S.unl.includes(id),l=S.skl[id]||0,row=document.createElement('div');
     row.className='perm'+(un?'':' locked');
     row.innerHTML='<div><h3></h3><p></p><div class="lv"></div></div><div class="wbtns"></div>';
-    row.querySelector('h3').textContent=d.name;row.querySelector('p').textContent=d.desc;
-    row.querySelector('.lv').textContent=un?`CẤP ${l}/${SKL_MAX} · +${l*12}% sát thương`:'CHƯA MỞ KHÓA';
+    row.querySelector('h3').textContent=tr(d,'name');row.querySelector('p').textContent=tr(d,'desc');
+    row.querySelector('.lv').textContent=un?L('CẤP ','LVL ')+`${l}/${SKL_MAX} · +${l*12}% `+L('sát thương','damage'):L('CHƯA MỞ KHÓA','LOCKED');
     const bx=row.querySelector('.wbtns');
-    if(!un){const c=SK_UNLOCK[id],b=document.createElement('button');b.className='stemb';b.textContent='Mở · '+c+' TBG';b.disabled=S.stem<c;
+    if(!un){const c=SK_UNLOCK[id],b=document.createElement('button');b.className='stemb';b.textContent=L('Mở · ','Unlock · ')+c+L(' TBG',' SC');b.disabled=S.stem<c;
       b.onclick=()=>{if(S.stem>=c){S.stem-=c;S.unl.push(id);if(S.load.length<4)S.load.push(id);save();renderEvo()}};bx.appendChild(b)}
     else{
-      const on=S.load.includes(id),t=document.createElement('button');t.className='tog'+(on?' on':'');t.textContent=on?'Đang mang':'Mang theo';
+      const on=S.load.includes(id),t=document.createElement('button');t.className='tog'+(on?' on':'');t.textContent=on?L('Đang mang','Equipped'):L('Mang theo','Equip');
       t.disabled=!on&&S.load.length>=4;t.setAttribute('aria-pressed',on);
       t.onclick=()=>{if(on){if(S.load.length>1)S.load=S.load.filter(x=>x!==id)}else if(S.load.length<4)S.load.push(id);save();renderEvo()};
-      const c=sklCost(l),u=document.createElement('button');u.textContent=l>=SKL_MAX?'Tối đa':c+' ADN';u.disabled=l>=SKL_MAX||S.adn<c;
+      const c=sklCost(l),u=document.createElement('button');u.textContent=l>=SKL_MAX?L('Tối đa','Max'):c+L(' ADN',' DNA');u.disabled=l>=SKL_MAX||S.adn<c;
       u.onclick=()=>{if(S.adn>=c&&l<SKL_MAX){S.adn-=c;S.skl[id]=l+1;save();renderEvo()}};
       bx.appendChild(t);bx.appendChild(u);
     }
@@ -1647,8 +1917,8 @@ function renderWpn(){
 function geneInner(el,g){
   const c=RAR[g.r].c;el.style.borderColor=c+'88';
   el.innerHTML='<i></i><b></b><span></span>';
-  el.querySelector('i').textContent=RAR[g.r].n;el.querySelector('i').style.color=c;
-  el.querySelector('b').textContent=GENES[g.t].name;el.querySelector('span').textContent=geneTxt(g);
+  el.querySelector('i').textContent=tr(RAR[g.r],'n');el.querySelector('i').style.color=c;
+  el.querySelector('b').textContent=tr(GENES[g.t],'name');el.querySelector('span').textContent=geneTxt(g);
 }
 function renderGenes(){
   const sl=$('geneSlots');sl.innerHTML='';
@@ -1656,36 +1926,36 @@ function renderGenes(){
     const d=document.createElement('button');d.className='gslot';
     if(i>=S.slots){
       d.className+=' lock';
-      if(i===S.slots){const c=i===4?40:90;d.innerHTML='<span>Mở ô gen</span><small></small>';d.querySelector('small').textContent=c+' TBG';d.disabled=S.stem<c;d.onclick=()=>{if(S.stem>=c){S.stem-=c;S.slots++;save();renderEvo()}}}
-      else{d.innerHTML='<small>khóa</small>';d.disabled=true}
+      if(i===S.slots){const c=i===4?40:90;d.innerHTML='<span></span><small></small>';d.querySelector('span').textContent=L('Mở ô gen','Unlock slot');d.querySelector('small').textContent=c+L(' TBG',' SC');d.disabled=S.stem<c;d.onclick=()=>{if(S.stem>=c){S.stem-=c;S.slots++;save();renderEvo()}}}
+      else{d.innerHTML='<small></small>';d.firstChild.textContent=L('khóa','locked');d.disabled=true}
     }else{
       const id=S.equip[i],g=S.genes.find(x=>x.id===id);
-      if(g){d.className+=' full';geneInner(d,g);d.title='Tháo gen';d.onclick=()=>{S.equip=S.equip.filter(x=>x!==id);save();renderEvo()}}
-      else{d.className+=' empty';d.textContent='ô trống';d.disabled=true}
+      if(g){d.className+=' full';geneInner(d,g);d.title=L('Tháo gen','Remove gene');d.onclick=()=>{S.equip=S.equip.filter(x=>x!==id);save();renderEvo()}}
+      else{d.className+=' empty';d.textContent=L('ô trống','empty');d.disabled=true}
     }
     sl.appendChild(d);
   }
   const inv=$('geneInv');inv.innerHTML='';
   const list=S.genes.filter(g=>!S.equip.includes(g.id)).sort((a,b)=>b.r-a.r||a.t.localeCompare(b.t));
-  if(!list.length){const p=document.createElement('p');p.className='note';p.style.margin='0';p.textContent='Chưa có gen nào trong kho. Chơi một ván để nhận gen.';inv.appendChild(p)}
+  if(!list.length){const p=document.createElement('p');p.className='note';p.style.margin='0';p.textContent=L('Chưa có gen nào trong kho. Chơi một ván để nhận gen.','No genes in storage yet. Play a run to get some.');inv.appendChild(p)}
   for(const g of list){
-    const b=document.createElement('button');b.className='gene';geneInner(b,g);b.title='Gắn gen';
+    const b=document.createElement('button');b.className='gene';geneInner(b,g);b.title=L('Gắn gen','Equip gene');
     b.onclick=()=>{if(S.equip.length<S.slots){S.equip.push(g.id);save();renderEvo()}else{b.animate?.([{transform:'translateX(-3px)'},{transform:'translateX(3px)'},{transform:'none'}],{duration:180})}};
     inv.appendChild(b);
   }
   let can=false;for(const t in GENES)for(let r=0;r<3;r++)if(list.filter(g=>g.t===t&&g.r===r).length>=3)can=true;
   $('mergeAll').disabled=!can;
-  $('geneCount').textContent=`đang gắn ${Math.min(S.equip.length,S.slots)}/${S.slots} · kho ${list.length}`;
+  $('geneCount').textContent=L('đang gắn ','equipped ')+`${Math.min(S.equip.length,S.slots)}/${S.slots} · `+L('kho ','storage ')+list.length;
 }
 function renderPerm(){
   const box=$('permList');box.innerHTML='';
   for(const p of PERM){
     const l=P(p.id),max=l>=p.max,cost=permCost(p,l),d=document.createElement('div');d.className='perm';
     d.innerHTML='<div><h3></h3><p></p><div class="lv"></div></div><button></button>';
-    d.querySelector('h3').textContent=p.name;
-    d.querySelector('p').textContent=max?p.desc(l):'Cấp tới: '+p.desc(l+1);
-    d.querySelector('.lv').textContent=`CẤP ${l}/${p.max}`+(l&&!max?` · hiện tại: ${p.desc(l)}`:'');
-    const b=d.querySelector('button');b.textContent=max?'Tối đa':cost+' ADN';b.disabled=max||S.adn<cost;
+    const pd=tr(p,'desc');d.querySelector('h3').textContent=tr(p,'name');
+    d.querySelector('p').textContent=max?pd(l):L('Cấp tới: ','Next: ')+pd(l+1);
+    d.querySelector('.lv').textContent=L('CẤP ','LVL ')+`${l}/${p.max}`+(l&&!max?L(' · hiện tại: ',' · now: ')+pd(l):'');
+    const b=d.querySelector('button');b.textContent=max?L('Tối đa','Max'):cost+L(' ADN',' DNA');b.disabled=max||S.adn<cost;
     b.onclick=()=>{if(S.adn>=cost&&!max){S.adn-=cost;S.perm[p.id]=l+1;save();renderEvo()}};
     box.appendChild(d);
   }
@@ -1700,6 +1970,7 @@ cv.addEventListener('pointerdown',e=>{auInit();aimFrom(e);try{cv.setPointerCaptu
 window.addEventListener('keyup',e=>{if(e.code==='ArrowLeft'||e.code==='KeyA')keys.l=false;if(e.code==='ArrowRight'||e.code==='KeyD')keys.r=false});
 window.addEventListener('blur',()=>{keys.l=keys.r=false});
 $('soundBtn').onclick=toggleSound;$('soundBtnHome').onclick=toggleSound;
+document.querySelectorAll('.flag').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 window.addEventListener('keydown',e=>{
   if(e.target&&e.target.tagName==='INPUT')return;
   auInit();
@@ -1728,7 +1999,7 @@ function frame(now){
   draw();
   requestAnimationFrame(frame);
 }
-refreshHome();
+applyLang();refreshHome();
 requestAnimationFrame(frame);
 })();
 </script>
