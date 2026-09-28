@@ -111,7 +111,10 @@ h1,h2,h3{margin:0;text-wrap:balance;line-height:1.1;font-weight:800;}
 
 /* OVER */
 #over .sheet{text-align:center;}
-#usCv{width:100%;max-width:380px;aspect-ratio:4/3;height:auto;display:block;margin:0 auto 14px;border-radius:8px;border:1px solid var(--line);background:#000;}
+.us{position:relative;width:100%;max-width:380px;aspect-ratio:4/3;margin:0 auto 14px;border-radius:8px;border:1px solid var(--line);background:#000;overflow:hidden;}
+.us img{position:absolute;inset:0;margin:auto;height:100%;width:auto;max-width:100%;object-fit:contain;display:none;}
+.us.gif img{display:block;}
+#usCv{position:absolute;inset:0;width:100%;height:100%;display:block;}
 #over h2{font-size:clamp(24px,6vw,32px);letter-spacing:-.02em;margin-top:4px;}
 .roast{margin:8px auto 16px;font-size:15px;line-height:1.55;color:#c3cdd3;max-width:44ch;}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:16px;}
@@ -179,7 +182,8 @@ h1,h2,h3{margin:0;text-wrap:balance;line-height:1.1;font-weight:800;}
 .card.k-fuse{border-color:rgba(255,181,71,.9);background:linear-gradient(160deg,rgba(16,30,44,.96),rgba(52,32,6,.96));box-shadow:0 0 26px rgba(255,181,71,.22);}
 .card.k-fuse .kind{color:#ffd08a;}
 .card.k-fuse .ic{color:#ffd08a;border-color:rgba(255,181,71,.4);background:rgba(255,181,71,.08);}
-#quiz .sheet{width:min(620px,100%);border-color:rgba(255,75,75,.45);}
+#quiz{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;}
+#quiz .sheet{width:min(620px,100%);border-color:rgba(255,75,75,.45);margin:auto;flex:none;}
 .qTimer{height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin:12px 0 16px;}
 .qTimer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--rec),var(--amber));transform-origin:left;}
 .qHead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
@@ -273,7 +277,7 @@ h1,h2,h3{margin:0;text-wrap:balance;line-height:1.1;font-weight:800;}
 
   <section id="over" class="overlay dim" hidden>
     <div class="sheet">
-      <canvas id="usCv" width="480" height="360" data-i18n-aria="usAria"></canvas>
+      <div class="us"><img id="usImg" src="ultrasound.gif" alt="" decoding="async"><canvas id="usCv" width="480" height="360" data-i18n-aria="usAria"></canvas></div>
       <div class="eyebrow" id="overTag"></div>
       <h2 id="overTitle" data-i18n="overTitle"></h2>
       <p class="roast" id="roast"></p>
@@ -378,7 +382,7 @@ const HT={
   boardEyebrow:['Những người trì hoãn chào đời lâu nhất','Those who postponed being born the longest'],
   tabStat:['Chỉ số','Stats'],tabWpn:['Vũ khí','Weapons'],tabGene:['Gen','Genes'],
   statNote:['ADN nhận sau mỗi ván. Thua càng muộn, ADN càng nhiều.','You earn DNA after every run. The later you lose, the more DNA you get.'],
-  wpnNote:['Chọn tối đa 4 vũ khí phụ mang vào trận. Khi lên cấp, chỉ vũ khí đang mang mới xuất hiện. Mở khóa bằng tế bào gốc (TBG), nâng cấp bằng ADN.','Pick up to 4 secondary weapons to bring into a run. Only equipped weapons show up when you level up. Unlock with stem cells (SC), upgrade with DNA.'],
+  wpnNote:['Chọn tối đa 4 vũ khí phụ mang vào trận (bấm “Mang theo”). Khi lên cấp, chỉ vũ khí đang mang mới xuất hiện trong thẻ. Nâng cấp bằng ADN.','Pick up to 4 secondary weapons to bring into a run (press “Equip”). Only equipped weapons appear on level-up cards. Upgrade with DNA.'],
   mergeAll:['Hợp nhất tất cả','Merge all'],
   quizEyebrow:['Cơ hội tái sinh · 1 lần mỗi ván · trả lời đúng để khỏi chào đời','Rebirth chance · once per run · answer right to avoid being born'],
   geneNote:['Gen rơi ra sau mỗi ván, ván càng dài và hạ càng nhiều boss thì càng nhiều gen hiếm. Chạm vào gen để gắn hoặc tháo. 3 gen giống nhau, cùng độ hiếm sẽ hợp nhất thành 1 gen hiếm hơn.','Genes drop after every run; longer runs and more bosses mean rarer genes. Tap a gene to equip or remove it. 3 identical genes of the same rarity merge into 1 rarer gene.'],
@@ -412,6 +416,8 @@ const HT={
         <div><b>Hai đầu</b><i>bicephalic</i>Bị hạ thì tách thành 2–3 con.</div>
         <div><b>Acrosome dày</b><i>thick acrosome</i>Mũ đầu cứng, đỡ 1/3 sát thương.</div>
         <div><b>Bầy non</b><i>immature</i>Nhỏ, kéo tới theo bầy.</div>
+        <div><b>Thoắt Ẩn</b><i>phase-shift</i>Định kỳ tàng hình: không bắn trúng được và lao nhanh hơn.</div>
+        <div><b>Kết Dính</b><i>agglutination</i>Dính vào tinh trùng khác, càng dính càng to và trâu.</div>
         <div><b>5 boss</b><i>boss</i>Đại Pháo Hai Bi, Tuyến Tiền Liệt, Túi Tinh, Mào Tinh, Testosterone.</div>`,
     `<div><b>Normal</b><i>normozoospermia</i>The most common, swims straight.</div>
         <div><b>Fast swimmer</b><i>progressive motility A</i>Slim, very fast, low health.</div>
@@ -420,6 +426,8 @@ const HT={
         <div><b>Two-headed</b><i>bicephalic</i>Splits into 2–3 when killed.</div>
         <div><b>Thick acrosome</b><i>thick acrosome</i>Hard cap, blocks 1/3 of damage.</div>
         <div><b>Immature</b><i>immature</i>Small, comes in swarms.</div>
+        <div><b>Phantom</b><i>phase-shift</i>Turns invisible at intervals: cannot be hit and moves faster.</div>
+        <div><b>Agglutinator</b><i>agglutination</i>Sticks to other sperm, growing bigger and tougher with each one.</div>
         <div><b>5 bosses</b><i>boss</i>Twin-Ball Cannon, Prostate, Seminal Vesicle, Epididymis, Testosterone.</div>`],
 };
 function applyLang(){
@@ -442,8 +450,11 @@ try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
 function fixSave(){
   for(const k of ['perm','skl'])if(!S[k]||typeof S[k]!=='object'||Array.isArray(S[k]))S[k]={};
   for(const k of ['unl','load','genes','equip'])if(!Array.isArray(S[k]))S[k]=[];
-  for(const k of ['shot','spin','bomb'])if(!S.unl.includes(k))S.unl.push(k);
-  S.load=S.load.filter(x=>S.unl.includes(x)).slice(0,4);if(!S.load.length)S.load=S.unl.slice(0,4);
+  for(const k of ['shot','spin','bomb','emp','zap','laser','jet'])if(!S.unl.includes(k))S.unl.push(k);
+  S.load=S.load.filter(x=>S.unl.includes(x)).slice(0,4);
+  // old saves kept the 3 starter weapons; give everyone the jet and the laser by default once
+  if(!S.load.length||(!S.loadV&&S.load.join()==='shot,spin,bomb'))S.load=['jet','laser','zap','bomb'];
+  S.loadV=1;
   S.equip=S.equip.filter(id=>S.genes.some(g=>g.id===id));
   S.adn=+S.adn||0;S.stem=+S.stem||0;S.slots=clamp(+S.slots||4,4,6);S.gid=+S.gid||S.genes.length;
 }
@@ -513,7 +524,7 @@ function mergeAll(){
     }}
   return made;
 }
-const SK_UNLOCK={shot:0,spin:0,bomb:0,emp:12,zap:20,laser:28,jet:36};
+const SK_UNLOCK={shot:0,spin:0,bomb:0,emp:0,zap:0,laser:0,jet:0};
 const SK_ORDER=['shot','spin','bomb','emp','zap','laser','jet'];
 const SKL_MAX=10,sklCost=l=>Math.floor(25*Math.pow(1.45,l));
 
@@ -528,7 +539,7 @@ const GUN=[
   {id:'g_crit',name:'Đột Biến Điểm',max:5,desc:'+8% tỉ lệ chí mạng (sát thương ×2.5).'},
 ];
 const SK={
-  jet:{name:'Đại Thực Bào',desc:'Tế bào miễn dịch bay lượn như tiêm kích, săn và bắn tinh trùng.',
+  jet:{name:'Đại Thực Bào',desc:'Phi đội tế bào miễn dịch bay như máy bay tiêm kích: lao vào quét đạn rồi vòng lại, để lại vệt khói.',
     ups:{n:{name:'Thêm Đại Thực Bào',max:3,desc:'+1 đại thực bào.'},d:{name:'Nuốt Nhanh',max:3,desc:'+50% sát thương đại thực bào.'},c:{name:'Tuần Tra Quỹ Đạo',max:1,desc:'Bay vòng quanh trứng, bắn nhanh gấp đôi.'}},
     ult:{name:'Bom Tiêu Hóa',desc:'Đại thực bào thả túi enzyme nổ lan khi bay qua địch.'}},
   zap:{name:'Xung Thần Kinh',desc:'Điện thế giật tinh trùng gần nhất rồi nhảy sang con kế bên.',
@@ -569,7 +580,7 @@ const EN_GUN={g_dmg:['Lytic Enzyme','+40% Cortical Granule damage.'],g_multi:['M
   g_bounce:['Elastic Membrane','Granules bounce off the edge of the field.'],g_kill:['Positive Feedback','Each kill boosts fire rate for 3 s, stacking.'],g_storm:['Cytokine Storm','Fire rate ×1.35.'],g_crit:['Point Mutation','+8% critical chance (×2.5 damage).']};
 for(const g of GUN){g.name_en=EN_GUN[g.id][0];g.desc_en=EN_GUN[g.id][1]}
 const EN_SK={
-  jet:['Macrophage','An immune cell that flies like a fighter jet, hunting and shooting sperm.',{n:['Extra Macrophage','+1 macrophage.'],d:['Fast Engulfing','+50% macrophage damage.'],c:['Orbital Patrol','Circles the egg and fires twice as fast.']},['Digestive Bombs','Macrophages drop enzyme sacs that explode as they fly over enemies.']],
+  jet:['Macrophage','A squadron of immune cells that fly like fighter jets: strafing runs, loops and contrails.',{n:['Extra Macrophage','+1 macrophage.'],d:['Fast Engulfing','+50% macrophage damage.'],c:['Orbital Patrol','Circles the egg and fires twice as fast.']},['Digestive Bombs','Macrophages drop enzyme sacs that explode as they fly over enemies.']],
   zap:['Nerve Impulse','An action potential shocks the nearest sperm, then jumps to the next one.',{j:['Saltatory Conduction','+2 jumps per bolt.'],b:['Multi-Synapse','+1 simultaneous bolt.'],d:['Action Potential','+50% impulse damage.']},['Full-Body Seizure','Each shock splashes around and paralyzes.']],
   laser:['Mitochondrial Beam','A continuous ATP beam burns everything in a straight line.',{n:['Mitochondrial Fission','+1 beam.'],r:['Membrane Refraction','The beam bends to 1 more target.'],w:['ATP Surplus','Wider beam, +35% damage.']},['Super Mitochondria','Beam twice as wide, ×1.5 damage.']],
   emp:['Calcium Wave','Periodically releases a calcium ion wave around the egg that damages and slows.',{r:['Ion Spread','+25% wave radius.'],c:['Open Channels','Waves fire 20% more often.'],d:['High Concentration','+55% wave damage.']},['Cell Freeze','Waves immobilize sperm for 1.5 s.']],
@@ -630,7 +641,7 @@ window.addEventListener('resize',resize);resize();
 
 /* ---------- baked sprites ---------- */
 function mk(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return [c,c.getContext('2d')]}
-const TINT={basic:'232,240,244',fast:'250,240,215',tank:'244,226,232',dodge:'222,226,252',split:'222,246,234',mini:'222,246,234',helmet:'246,242,232',swarm:'216,228,240',boss:'236,226,230'};
+const TINT={phantom:'214,226,255',aggl:'242,236,206',basic:'232,240,244',fast:'250,240,215',tank:'244,226,232',dodge:'222,226,252',split:'222,246,234',mini:'222,246,234',helmet:'246,242,232',swarm:'216,228,240',boss:'236,226,230'};
 const SPR={};
 // head sprite: 128×80, head centre (84,40), rx 26 → drawn scaled by r/26
 function bakeHead(type){
@@ -712,27 +723,20 @@ const [hexSpr,hx0]=mk(64,64);(()=>{const c=32;hx0.shadowColor='rgba(200,235,255,
   hx0.shadowBlur=0;hx0.strokeStyle='rgba(255,255,255,.35)';hx0.beginPath();hx0.moveTo(c-9,c-12);hx0.lineTo(c+4,c+14);hx0.stroke()})();
 const [bokehSpr,bk0]=mk(128,128);(()=>{const g=bk0.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(200,225,240,.35)');g.addColorStop(.7,'rgba(200,225,240,.5)');g.addColorStop(.86,'rgba(220,238,250,.75)');g.addColorStop(1,'rgba(200,225,240,0)');bk0.fillStyle=g;bk0.beginPath();bk0.arc(64,64,64,0,TAU);bk0.fill()})();
 const debris=[];
-for(let i=0;i<90;i++)debris.push({L:0,x:rnd(-1.1,1.1),y:rnd(-1.1,1.1),r:rnd(.4,1.3),a:rnd(.12,.4),vx:rnd(-3,3),vy:rnd(-3,3),tw:rnd(0,TAU),ts:rnd(1,3)});
-for(let i=0;i<46;i++)debris.push({L:1,x:rnd(-1.1,1.1),y:rnd(-1.1,1.1),r:rnd(2.5,6.5),a:rnd(.25,.6),vx:rnd(-6,6),vy:rnd(-6,6),rot:rnd(0,TAU),vr:rnd(-.6,.6),tw:rnd(0,TAU),ts:rnd(.6,1.6),hex:Math.random()<.45});
-for(let i=0;i<14;i++)debris.push({L:2,x:rnd(-1.1,1.1),y:rnd(-1.1,1.1),r:rnd(18,55),a:rnd(.025,.07),vx:rnd(-12,12),vy:rnd(-10,10),tw:rnd(0,TAU),ts:rnd(.2,.5)});
+for(let i=0;i<110;i++)debris.push({L:0,x:rnd(-1.1,1.1),y:rnd(-1.1,1.1),r:rnd(.4,1.1),a:rnd(.08,.26),vx:rnd(-2,2),vy:rnd(-2,2),tw:rnd(0,TAU),ts:rnd(.1,.3)});
+for(let i=0;i<40;i++)debris.push({L:1,x:rnd(-1.1,1.1),y:rnd(-1.1,1.1),r:rnd(2,5),a:rnd(.1,.22),vx:rnd(-4,4),vy:rnd(-4,4),tw:rnd(0,TAU),ts:rnd(.1,.25)});
+for(let i=0;i<9;i++)debris.push({L:2,x:rnd(-1.1,1.1),y:rnd(-1.1,1.1),r:rnd(26,70),a:rnd(.015,.04),vx:rnd(-8,8),vy:rnd(-6,6),tw:rnd(0,TAU),ts:rnd(.05,.15)});
 const caustics=[...Array(3)].map((_,i)=>({x:rnd(-.6,.6),y:rnd(-.6,.6),r:rnd(.5,.9),ph:i*2.1}));
 function flowX(x,y,t){return Math.sin(y*2.1+t*.13)*5+Math.cos(x*1.3-t*.07)*2}
 function flowY(x,y,t){return Math.cos(x*1.9+t*.11)*4}
 function drawDebris(layer,T){
   ctx.save();ctx.globalCompositeOperation='lighter';
+  const f=[.25,.6,1.6][layer],ox=Math.sin(T*.05)*14*f,oy=Math.cos(T*.037)*9*f;
   for(const p of debris){
     if(p.L!==layer)continue;
-    const x=p.x*VW,y=p.y*VH,tw=.55+.45*Math.sin(T*p.ts+p.tw);
+    const x=p.x*VW+ox,y=p.y*VH+oy,tw=.8+.2*Math.sin(T*p.ts+p.tw);
     if(p.L===0){ctx.globalAlpha=p.a*tw;ctx.fillStyle='#dfeaf0';ctx.fillRect(x-p.r/2,y-p.r/2,p.r,p.r)}
-    else if(p.L===1){
-      const flash=Math.pow(Math.max(0,Math.sin(T*p.ts*.7+p.tw)),10);
-      ctx.globalAlpha=p.a*(.35+.65*tw);
-      ctx.save();ctx.translate(x,y);ctx.rotate(p.rot);
-      if(p.hex){const s=p.r*1.6;ctx.drawImage(hexSpr,-s,-s,s*2,s*2)}
-      else{const s=p.r*.9;ctx.fillStyle='rgba(230,244,255,.9)';ctx.beginPath();ctx.moveTo(0,-s);ctx.lineTo(s*.45,0);ctx.lineTo(0,s);ctx.lineTo(-s*.45,0);ctx.closePath();ctx.fill()}
-      ctx.restore();
-      if(flash>.02){ctx.globalAlpha=flash*.9;const g=p.r*5;ctx.drawImage(glintSpr,x-g,y-g,g*2,g*2)}
-    }else{ctx.globalAlpha=p.a*(.7+.3*tw);ctx.drawImage(bokehSpr,x-p.r,y-p.r,p.r*2,p.r*2)}
+    else if(p.L===1){ctx.globalAlpha=p.a*tw;ctx.drawImage(bokehSpr,x-p.r,y-p.r,p.r*2,p.r*2)    }else{ctx.globalAlpha=p.a*(.7+.3*tw);ctx.drawImage(bokehSpr,x-p.r,y-p.r,p.r*2,p.r*2)}
   }
   ctx.restore();
 }
@@ -757,6 +761,8 @@ const ET={
   mini:{hp:6,spd:58,r:7,xp:.5},
   helmet:{hp:32,spd:33,r:11,xp:3,armor:.35},
   swarm:{hp:4,spd:64,r:6,xp:.35},
+  phantom:{hp:16,spd:46,r:10,xp:2,phantom:true},
+  aggl:{hp:26,spd:30,r:12,xp:3,aggl:true},
 };
 const BOSSES=[
   {id:'testes',hp:1,name:'Đại Pháo Hai Bi',name_en:'Twin-Ball Cannon',skill:'Phóng đàn',skill_en:'Volley',
@@ -802,6 +808,7 @@ function mkEnemy(type,x,y,hpScale=1){
   const hp=d.hp*hpMul(t)*hpScale;
   const e={id:++uidN,type,x,y,hp,max:hp,r:d.r,spd:d.spd*spdMul(t)*rnd(.9,1.1),xp:d.xp,tail:d.tail||1,
     armor:d.armor||0,dodge:d.dodge||0,split:!!d.split,kx:0,ky:0,ph:Math.random()*TAU,wob:Math.random()*TAU,wobA:type==='dodge'?rnd(30,45):rnd(6,16),
+    phantom:!!d.phantom,aggl:!!d.aggl,pt:rnd(1.2,2.4),phase:false,stuck:[],
     slowT:0,frozenT:0,stunT:0,flash:0,dodgeCd:0,d:Math.hypot(x,y),eta:99,ang:Math.atan2(-y,-x)};
   R.en.push(e);return e;
 }
@@ -812,6 +819,8 @@ function pickType(t){
   if(t>65)w.push(['dodge',2+t/80]);
   if(t>95)w.push(['split',2+t/90]);
   if(t>125)w.push(['helmet',1.5+t/90]);
+  if(t>80)w.push(['phantom',1.8+t/100]);
+  if(t>110)w.push(['aggl',1.2+t/110]);
   let s=0;w.forEach(x=>s+=x[1]);let r=Math.random()*s;
   for(const [k,v] of w){if((r-=v)<=0)return k}
   return 'basic';
@@ -837,7 +846,7 @@ function spawnBoss(){
 function addText(x,y,s,col,big){if(R.tx.length>60)R.tx.shift();R.tx.push({x,y,s,col,big,life:big?1:.7,max:big?1:.7})}
 function fx(o){if(R.fx.length>420)R.fx.shift();R.fx.push(o)}
 function hurt(e,dmg,src){
-  if(e.dead)return;
+  if(e.dead||e.phase)return;
   let crit=false;
   if(src==='gun'&&Math.random()<critC()){dmg*=2.5*(1+R.gb.critd);crit=true}
   if(e.armor)dmg*=1-e.armor;
@@ -878,7 +887,7 @@ function shoot(x,y,a,spd,o){
 }
 function nearestFrom(x,y,maxD,skip){
   let best=null,bd=maxD*maxD;
-  for(const e of R.en){if(e.dead||(skip&&skip.has(e)))continue;const dx=e.x-x,dy=e.y-y,d=dx*dx+dy*dy;if(d<bd){bd=d;best=e}}
+  for(const e of R.en){if(e.dead||e.phase||(skip&&skip.has(e)))continue;const dx=e.x-x,dy=e.y-y,d=dx*dx+dy*dy;if(d<bd){bd=d;best=e}}
   return best;
 }
 
@@ -1052,7 +1061,7 @@ function update(dt){
   if(R.t>100){R.swarmT-=dt;if(R.swarmT<=0){R.swarmT=rnd(22,32);spawnSwarm()}}
   if(R.t>=R.nextBoss){R.nextBoss+=BOSS_EVERY;spawnBoss()}
   for(const e of R.en){e.d=Math.hypot(e.x,e.y);e.eta=(e.d-ER-e.r*.5)/Math.max(6,e.spd*(e.slowT>0?.5:1))}
-  R.sorted=R.en.filter(e=>!e.dead).sort((a,b)=>a.eta-b.eta);
+  R.sorted=R.en.filter(e=>!e.dead&&!e.phase).sort((a,b)=>a.eta-b.eta);
   if(R.kbT>0){R.kbT-=dt;if(R.kbT<=0)R.kbStack=0}
   updGun(dt);
   for(const id of R.skOrder)SKU[id](R.sk[id],dt);
@@ -1087,7 +1096,7 @@ function updBullets(dt){
       if(e.dead)continue;
       const dx=e.x-b.x,dy=e.y-b.y,rr=e.r+b.r;
       if(dx>rr||dx<-rr||dy>rr||dy<-rr||dx*dx+dy*dy>rr*rr)continue;
-      if(b.hit.includes(e.id))continue;
+      if(e.phase||b.hit.includes(e.id))continue;
       b.hit.push(e.id);
       if(e.dodge&&e.dodgeCd<=0&&e.stunT<=0&&e.frozenT<=0&&Math.random()<e.dodge){
         e.dodgeCd=1.3;const px=-b.vy,py=b.vx,l=Math.hypot(px,py)||1,s=Math.random()<.5?1:-1;
@@ -1112,6 +1121,17 @@ function updEnemies(dt){
     e.flash-=dt;e.dodgeCd-=dt;e.slowT-=dt;e.frozenT-=dt;e.stunT-=dt;if(e.shield>0)e.shield-=dt;
     const d=e.d||1,ux=-e.x/d,uy=-e.y/d;
     let sp=e.spd*(e.slowT>0?.5:1)*(R.hype&&!e.boss?1.3:1);
+    if(e.phantom){e.pt-=dt;if(e.pt<=0){e.phase=!e.phase;e.pt=e.phase?rnd(1,1.6):rnd(1.6,2.6)}if(e.phase)sp*=1.8}
+    if(e.aggl&&e.stunT<=0&&e.frozenT<=0){
+      let best=null,bd=130*130;for(const o of R.en){if(o===e||o.dead||o.boss||o.phase)continue;const qx=o.x-e.x,qy=o.y-e.y,q=qx*qx+qy*qy;if(q<bd){bd=q;best=o}}
+      if(best){const q=Math.sqrt(bd)||1;
+        if(q<e.r+best.r*.8){ // stick together: bigger, tougher, a bit slower
+          best.dead=true;e.hp+=best.hp*1.2;e.max+=best.hp*1.2;e.r=Math.min(30,Math.sqrt(e.r*e.r+best.r*best.r*.7));e.spd*=.93;e.xp+=best.xp;
+          e.stuck.push({a:Math.atan2(best.y-e.y,best.x-e.x)-e.ang,t:best.type,r:best.r});if(e.stuck.length>9)e.stuck.shift();
+          fx({k:'ring',x:e.x,y:e.y,r:e.r*.5,to:e.r*1.6,life:.35,max:.35,col:'242,236,206',w:2});
+          if(!R.aggSaid){R.aggSaid=true;narrate(L('Kết dính: tinh trùng dị dạng dính vào nhau thành cục, to và trâu hơn. Hiện tượng này có thật.','Agglutination: abnormal sperm clump together into bigger, tougher blobs. This really happens.'))}
+        }else{e.kx+=(best.x-e.x)/q*60*dt*10;e.ky+=(best.y-e.y)/q*60*dt*10}}
+    }
     if(e.frozenT>0||e.stunT>0)sp=0;
     if(e.boss){e.age=(e.age||0)+dt;const stop=Math.max(0,ER+e.r+120-Math.max(0,e.age-25)*2.5);if(d<stop||e.mode==='dash'||e.mode==='back')sp=0}
     e.wob+=dt*(e.type==='dodge'?5:2.5+sp/30);
@@ -1195,6 +1215,7 @@ const SKU={
         dr.sh-=dt;
         if(tg&&dr.sh<=0&&l<230){const fa=Math.atan2(dr.vy,dr.vx),ta=Math.atan2(dy,dx);if(Math.cos(fa-ta)>.6){dr.sh=.45;shoot(dr.x,dr.y,ta,560,{dmg,src:'jet',r:3.5,life:.7,spr:dotIce})}}
       }
+      (dr.tr||(dr.tr=[])).push(dr.x,dr.y);if(dr.tr.length>28)dr.tr.splice(0,2);
       if(s.ult||R.fz.fleet){const fl=R.fz.fleet;dr.bomb-=dt;if(dr.bomb<=0&&nearestFrom(dr.x,dr.y,fl?110:70)){dr.bomb=fl?.45:1;const bx=dr.x,by=dr.y;R.lobs.push({t:0,dur:.25,x0:bx,y0:by,x1:bx,y1:by,ab:fl,small:true,cb:()=>explode(bx,by,fl?72:58,dmg*(fl?2.8:2.4),'200,235,255')})}}
     });
   },
@@ -1532,48 +1553,103 @@ function finishRun(){
   $('saveMsg').textContent=lbReady()?L('Chỉ lưu kỷ lục tốt nhất của bạn.','Only your best run is kept.'):L('Đang kết nối bảng vàng…','Connecting to the Hall of Fame…');
   $('saveBtn').disabled=false;renderBoard();sbLoadScores();
   $('hud').hidden=true;$('bottom').hidden=true;$('sub').classList.remove('on');$('over').hidden=false;
-  drawUltrasound();
+  drawUltrasound();startUltrasound();
 }
 const NAMES=['Bé Lọt Lưới','Kẻ Được Sinh Ra','Trứng Thất Thủ','Bé Hậu Đậu','Tinh Trùng Số 1','Bé Chín Tháng','Người Thua Cuộc'];
 const NAMES_EN=['Leaky Goalie','Born Anyway','Fallen Egg','Clumsy Baby','Sperm No. 1','Nine-Month Kid','Runner-Up'];
 const randomName=()=>{const n=LANG==='en'?NAMES_EN:NAMES;return n[Math.random()*n.length|0]+' '+(100+Math.random()*900|0)};
 
-/* ---------- ultrasound ---------- */
-let usBase=null;
-function drawUltrasound(){
-  const c=$('usCv'),x=c.getContext('2d'),w=c.width,h=c.height;
-  if(!usBase){
-    usBase=document.createElement('canvas');usBase.width=w;usBase.height=h;
-    const b=usBase.getContext('2d'),img=b.createImageData(w,h),d=img.data;
-    const ax=w/2,ay=18,R0=h-30,span=.62;
-    const inE=(px,py,cx,cy,rx,ry,rot)=>{const c1=Math.cos(rot),s1=Math.sin(rot),dx=px-cx,dy=py-cy,u=(dx*c1+dy*s1)/rx,v=(-dx*s1+dy*c1)/ry;return u*u+v*v};
-    for(let y=0;y<h;y++)for(let X=0;X<w;X++){
-      const dx=X-ax,dy=y-ay,r=Math.hypot(dx,dy),a=Math.atan2(dx,dy);let v=0;
-      if(r<R0&&r>24&&Math.abs(a)<span){
-        v=Math.random()*70*(1-r/R0*.4);
-        // uterine wall
-        const sac=inE(X,y,w/2,h*.58,w*.32,h*.3,0);
-        if(sac<1)v*=.25; else if(sac<1.25)v+=90*Math.random();
-        const head=inE(X,y,w*.6,h*.5,34,31,0),body=inE(X,y,w*.43,h*.62,56,34,-.35),arm=inE(X,y,w*.53,h*.66,18,8,.6),leg=inE(X,y,w*.33,h*.7,26,10,.9);
-        const m=Math.min(head,body,arm,leg);
-        if(m<1)v=50+Math.random()*80+(m>.72?80:0);
-        if(head<.7)v=25+Math.random()*50;
-        if(head<1&&head>.78)v=170+Math.random()*80;
-        const sp=inE(X,y,w*.43,h*.62,48,26,-.35);if(sp>.72&&sp<.86&&dy<h*.62-ay+ (X-w*.43)*.35&&Math.sin(Math.atan2(y-h*.62,X-w*.43)*14)>.2)v=200+Math.random()*55;
-        if(Math.abs(a)>span-.02||r>R0-2)v=0;
-      }
-      const i=(y*w+X)*4;d[i]=d[i+1]=d[i+2]=Math.min(255,v);d[i+3]=255;
+/* ---------- ultrasound (animated) ---------- */
+let usBase=null,usNoise=null,usPat=null,usRun=false;
+function usBake(w,h){
+  // static tissue: fan-shaped sector, uterine wall, dark amniotic fluid
+  usBase=document.createElement('canvas');usBase.width=w;usBase.height=h;
+  const b=usBase.getContext('2d'),img=b.createImageData(w,h),d=img.data;
+  const ax=w/2,ay=18,R0=h-30,span=.62;
+  const inE=(px,py,cx,cy,rx,ry)=>{const u=(px-cx)/rx,v=(py-cy)/ry;return u*u+v*v};
+  for(let y=0;y<h;y++)for(let X=0;X<w;X++){
+    const dx=X-ax,dy=y-ay,r=Math.hypot(dx,dy),ang=Math.atan2(dx,dy);let v=0;
+    if(r<R0&&r>24&&Math.abs(ang)<span){
+      v=Math.random()*70*(1-r/R0*.45);
+      const sac=inE(X,y,w/2,h*.58,w*.34,h*.31);
+      if(sac<1)v*=.18;else if(sac<1.3)v+=110*Math.random()*(1.3-sac)/.3;
+      if(Math.abs(ang)>span-.02||r>R0-2)v=0;
     }
-    b.putImageData(img,0,0);
+    const i=(y*w+X)*4;d[i]=d[i+1]=d[i+2]=Math.min(255,v);d[i+3]=255;
   }
-  const name=($('nameIn').value||L('Vô danh','Anonymous')).trim().slice(0,20);
+  b.putImageData(img,0,0);
+  // speckle texture used to "fill" soft tissue, and a moving noise veil
+  const mkNoise=(n,lo,hi)=>{const c=document.createElement('canvas');c.width=c.height=n;const g=c.getContext('2d'),im=g.createImageData(n,n);for(let i=0;i<im.data.length;i+=4){const v=lo+Math.random()*(hi-lo);im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}g.putImageData(im,0,0);return c};
+  usPat=mkNoise(96,40,200);usNoise=mkNoise(128,0,255);
+}
+const usImg=$('usImg');let usGif=false;
+usImg.addEventListener('load',()=>{usGif=true;usImg.parentElement.classList.add('gif')});
+usImg.addEventListener('error',()=>{usGif=false;usImg.parentElement.classList.remove('gif')});
+if(usImg.complete&&usImg.naturalWidth){usGif=true;usImg.parentElement.classList.add('gif')}
+function drawUltrasound(T){
+  const c=$('usCv'),x=c.getContext('2d'),w=c.width,h=c.height;
+  T=T||performance.now()/1000;
+  x.setTransform(1,0,0,1,0,0);x.globalCompositeOperation='source-over';x.globalAlpha=1;x.filter='none';
+  if(usGif){x.clearRect(0,0,w,h);usLabels(x,w,h,T);return}
+  if(!usBase)usBake(w,h);
   x.drawImage(usBase,0,0);
+  // foetus in profile, curled; it waves an arm and kicks
+  const pat=x.createPattern(usPat,'repeat');
+  x.save();x.beginPath();x.moveTo(w/2,18);x.arc(w/2,18,h-32,Math.PI/2-.6,Math.PI/2+.6);x.closePath();x.clip();
+  x.translate(w*.45,h*.64+Math.sin(T*.8)*1.5);x.scale(1.12,1.12);
+  const soft=(path,al,blur)=>{x.save();path();x.clip();x.filter=`blur(${blur||1.2}px)`;x.globalAlpha=al;x.fillStyle=pat;x.translate((T*6)%96,(T*4)%96);x.fillRect(-300,-300,600,600);x.restore()};
+  const rim=(path,al,lw)=>{x.save();x.globalCompositeOperation='lighter';x.filter='blur(1.6px)';x.strokeStyle=`rgba(235,235,235,${al})`;x.lineWidth=lw;x.lineCap='round';x.lineJoin='round';path();x.stroke();x.restore()};
+  const seg=(p,q,wd,al)=>{x.save();x.filter='blur(1.1px)';x.lineCap='round';x.lineWidth=wd;x.strokeStyle=pat;x.globalAlpha=al;x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(q[0],q[1]);x.stroke();x.restore()};
+  // umbilical cord to the placenta
+  rim(()=>{x.beginPath();x.moveTo(-8,40);for(let i=1;i<=10;i++){const f=i/10;x.lineTo(-8-f*40+Math.sin(f*9+T*1.3)*6,40+f*55)}},.5,4);
+  // curled body
+  const body=()=>{x.beginPath();x.moveTo(34,-30);x.bezierCurveTo(4,-56,-62,-52,-90,-16);x.bezierCurveTo(-106,14,-86,46,-44,50);x.bezierCurveTo(-8,53,30,38,40,10);x.closePath()};
+  soft(body,.8);rim(body,.22,3);
+  // spine along the back
+  x.save();x.globalCompositeOperation='lighter';x.filter='blur(.6px)';
+  for(let i=0;i<15;i++){const t=i/14,bx=Math.pow(1-t,3)*36+3*Math.pow(1-t,2)*t*10+3*(1-t)*t*t*(-46)+t*t*t*(-64),by=Math.pow(1-t,3)*(-18)+3*Math.pow(1-t,2)*t*(-42)+3*(1-t)*t*t*(-38)+t*t*t*(-2);
+    x.fillStyle=`rgba(245,245,245,${.45+.35*Math.random()})`;x.beginPath();x.ellipse(bx,by+5,3.3,2.1,t*2.4-.4,0,TAU);x.fill()}
+  x.restore();
+  // leg: thigh tucked toward the belly, lower leg kicks
+  const kick=Math.pow(Math.max(0,Math.sin(T*1.6)),3)*.8,hip=[-70,22],knee=[hip[0]+Math.cos(.35-kick*.5)*44,hip[1]+Math.sin(.35-kick*.5)*44],ank=[knee[0]+Math.cos(2.2-kick*1.3)*40,knee[1]+Math.sin(2.2-kick*1.3)*40];
+  seg(hip,knee,24,.95);seg(knee,ank,18,.95);rim(()=>{x.beginPath();x.moveTo(hip[0],hip[1]);x.lineTo(knee[0],knee[1]);x.lineTo(ank[0],ank[1])},.4,2.5);
+  x.save();x.globalCompositeOperation='lighter';x.filter='blur(1px)';x.fillStyle='rgba(225,225,225,.45)';x.beginPath();x.ellipse(ank[0]+4,ank[1]+2,10,5,2.2-kick*1.3+1.6,0,TAU);x.fill();x.restore();
+  // head with an uneven bright skull, eye socket and a face in profile
+  const hx=76,hy=-34+Math.sin(T*.6)*1.2,head=()=>{x.beginPath();x.ellipse(hx,hy,54,47,.2,0,TAU)};
+  soft(head,.5);
+  x.save();x.globalCompositeOperation='lighter';x.filter='blur(1.4px)';x.lineCap='round';
+  for(const [a0,a1,al,lw] of [[-2.9,-.5,.85,4.5],[-.5,.45,.55,3],[1.8,3.3,.4,3]]){x.strokeStyle=`rgba(245,245,245,${al})`;x.lineWidth=lw;x.beginPath();x.ellipse(hx,hy,54,47,.2,a0,a1);x.stroke()}
+  x.restore();
+  x.save();x.fillStyle='rgba(0,0,0,.45)';x.filter='blur(2px)';x.beginPath();x.ellipse(hx+27,hy-4,9,7,.2,0,TAU);x.fill();x.restore();
+  rim(()=>{x.beginPath();x.moveTo(hx+40,hy-34);x.quadraticCurveTo(hx+56,hy-20,hx+54,hy-6);x.quadraticCurveTo(hx+66,hy,hx+61,hy+8);x.quadraticCurveTo(hx+66,hy+14,hx+60,hy+19);x.quadraticCurveTo(hx+65,hy+24,hx+59,hy+28);x.quadraticCurveTo(hx+56,hy+40,hx+40,hy+42)},.7,2.8);
+  // arm: shoulder to a hand waving in front of the face
+  const wave=Math.sin(T*2.2)*.45+Math.sin(T*5)*.07,sho=[30,-10],elb=[sho[0]+Math.cos(.25+wave*.4)*30,sho[1]+Math.sin(.25+wave*.4)*30],hand=[elb[0]+Math.cos(-1.05+wave)*30,elb[1]+Math.sin(-1.05+wave)*30];
+  seg(sho,elb,16,.95);seg(elb,hand,13,.95);rim(()=>{x.beginPath();x.moveTo(sho[0],sho[1]);x.lineTo(elb[0],elb[1]);x.lineTo(hand[0],hand[1])},.42,2.4);
+  x.save();x.globalCompositeOperation='lighter';x.filter='blur(.8px)';x.fillStyle='rgba(240,240,240,.55)';
+  for(let i=0;i<5;i++){const fa=-1.05+wave-.6+i*.3;x.beginPath();x.ellipse(hand[0]+Math.cos(fa)*7,hand[1]+Math.sin(fa)*7,2.4,1.6,fa,0,TAU);x.fill()}
+  // heart flicker (about 140 bpm)
+  const hb=Math.pow(Math.max(0,Math.sin(T*2.35*Math.PI)),6);x.fillStyle=`rgba(255,255,255,${.12+hb*.55})`;x.filter='blur(1.5px)';x.beginPath();x.ellipse(8,-4,9+hb*2,7+hb*2,0,0,TAU);x.fill();
+  x.restore();
+  x.setTransform(1,0,0,1,0,0);
+  // live speckle veil
+  x.globalAlpha=.16;x.drawImage(usNoise,-(Math.random()*128|0),-(Math.random()*128|0),w+256,h+256);
+  x.restore();
+  x.globalCompositeOperation='source-over';x.globalAlpha=1;
+  usLabels(x,w,h,T);
+}
+function usLabels(x,w,h,T){
+  const name=($('nameIn').value||L('Vô danh','Anonymous')).trim().slice(0,20);
+  x.shadowColor='rgba(0,0,0,.9)';x.shadowBlur=3;
   x.fillStyle='#d8dde0';x.font='500 12px JetBrains Mono, monospace';x.textBaseline='top';
   x.fillText('THU KHOA DAU THAI  OB',10,8);x.fillText('GA 40w0d',10,24);
-  x.textAlign='right';x.fillText('EFW 3.2 kg',w-10,8);x.fillText('FHR 142 bpm',w-10,24);
+  x.textAlign='right';x.fillText('EFW 3.2 kg',w-10,8);x.fillText(`FHR ${140+Math.round(Math.sin(T*.7)*4)} bpm`,w-10,24);
   x.textAlign='left';x.fillText(L('BN: ','PT: ')+name.toUpperCase(),10,h-20);
   x.textAlign='right';x.fillText('T+ '+fmtT(R?R.t:0),w-10,h-20);x.textAlign='left';
+  x.fillStyle='rgba(216,221,224,.8)';x.fillRect(w-18,60,2,h-120);x.fillRect(w-24,60+((T*20)%(h-120)),8,2);
+  x.shadowBlur=0;
 }
+function usLoop(){if(state!=='over'||$('over').hidden){usRun=false;return}drawUltrasound();requestAnimationFrame(usLoop)}
+function startUltrasound(){if(!usRun){usRun=true;requestAnimationFrame(usLoop)}}
 $('nameIn').addEventListener('input',()=>{if(state==='over')drawUltrasound()});
 
 /* ---------- leaderboard + cloud save ----------
@@ -1747,7 +1823,7 @@ function drawWorld(T){
   // lasers
   if(R.sk.laser&&!dying)drawLaser(R.sk.laser,T);
   // sperm
-  for(const e of R.en){if(e.dead||e.boss)continue;const cul=dying&&e===dying.e;ctx.globalAlpha=cul?1:fade;if(ctx.globalAlpha>.02)drawSperm(e)}
+  for(const e of R.en){if(e.dead||e.boss)continue;const cul=dying&&e===dying.e;ctx.globalAlpha=(cul?1:fade)*(e.phantom?(e.phase?.1+.06*Math.sin(T*40):.85+.15*Math.sin(T*9)):1);if(ctx.globalAlpha>.02)drawSperm(e)}
   ctx.globalAlpha=fade;
   if(R.boss&&!R.boss.dead){
     const b=R.boss;
@@ -1782,13 +1858,17 @@ function drawSperm(e){
   ctx.lineCap='round';ctx.lineJoin='round';
   const chunk=(a,b,w,al)=>{ctx.strokeStyle=`rgba(${t},${al})`;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(pts[a][0],pts[a][1]);for(let k=a+1;k<=b;k++)ctx.lineTo(pts[k][0],pts[k][1]);ctx.stroke()};
   chunk(0,5,Math.max(1,r*.2),.5);chunk(5,10,Math.max(.8,r*.13),.34);chunk(10,14,Math.max(.6,r*.08),.2);
+  if(e.stuck&&e.stuck.length){for(const q of e.stuck){const sp2=SPR[q.t]||SPR.basic,s2=q.r/26*.85,d=r*.75;ctx.save();ctx.rotate(q.a);ctx.translate(d,0);ctx.rotate(Math.PI+Math.sin(e.ph*.5+q.a)*.3);
+    ctx.strokeStyle='rgba(242,236,206,.35)';ctx.lineWidth=Math.max(.6,q.r*.12);ctx.beginPath();ctx.moveTo(-1.85*q.r*.85,0);ctx.quadraticCurveTo(-3*q.r,Math.sin(e.ph+q.a)*q.r,-4.2*q.r,0);ctx.stroke();
+    ctx.drawImage(sp2,-84*s2,-40*s2,128*s2,80*s2);ctx.restore()}
+    ctx.fillStyle='rgba(242,236,206,.12)';ctx.beginPath();ctx.arc(0,0,r*1.25,0,TAU);ctx.fill()}
   ctx.drawImage(spr,-84*s,-40*s,128*s,80*s);
   if(e.flash>0)ctx.drawImage(spr,-84*s,-40*s,128*s,80*s);
   if(e.frozenT>0){ctx.fillStyle='rgba(120,190,255,.18)';ctx.beginPath();ctx.arc(0,0,r*1.4,0,TAU);ctx.fill()}
   if(e.shield>0){ctx.strokeStyle='rgba(255,214,150,.55)';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(0,0,r*1.45,0,TAU);ctx.stroke()}
   ctx.restore();
   if(e.stunT>0){ctx.fillStyle='rgba(185,226,255,.8)';for(let i=0;i<3;i++){const a=performance.now()/180+i*2.1;ctx.fillRect(e.x+Math.cos(a)*r*1.2-1,e.y+Math.sin(a)*r*1.2-1,2,2)}}
-  if((e.type==='tank'||e.type==='helmet')&&e.hp<e.max){const w=r*2;ctx.fillStyle='rgba(255,255,255,.14)';ctx.fillRect(e.x-w/2,e.y+r+5,w,1.5);ctx.fillStyle='rgba(255,255,255,.75)';ctx.fillRect(e.x-w/2,e.y+r+5,w*Math.max(0,e.hp/e.max),1.5)}
+  if((e.type==='tank'||e.type==='helmet'||e.type==='aggl')&&e.hp<e.max){const w=r*2;ctx.fillStyle='rgba(255,255,255,.14)';ctx.fillRect(e.x-w/2,e.y+r+5,w,1.5);ctx.fillStyle='rgba(255,255,255,.75)';ctx.fillRect(e.x-w/2,e.y+r+5,w*Math.max(0,e.hp/e.max),1.5)}
 }
 function drawEgg(T,dying){
   const k=1/EGG_PX,sz=EGG_R*2;
@@ -1894,9 +1974,15 @@ function drawTesto(e,T){
 }
 function drawMacro(dr,T,ult){
   const a=Math.atan2(dr.vy,dr.vx),r=12;
+  // contrail
+  if(dr.tr&&dr.tr.length>4){ctx.lineCap='round';for(let i=2;i<dr.tr.length;i+=2){const k=i/dr.tr.length;ctx.strokeStyle=`rgba(200,232,255,${k*.35})`;ctx.lineWidth=1+k*3;ctx.beginPath();ctx.moveTo(dr.tr[i-2],dr.tr[i-1]);ctx.lineTo(dr.tr[i],dr.tr[i+1]);ctx.stroke()}}
+  // bank into turns
+  const turn=clamp(((a-(dr.pa??a)+Math.PI*3)%(Math.PI*2)-Math.PI)*8,-1,1);dr.pa=a;dr.bank=(dr.bank||0)*.85+turn*.15;
   ctx.save();ctx.translate(dr.x,dr.y);ctx.rotate(a);
   ctx.beginPath();
-  for(let i=0;i<=24;i++){const th=i/24*TAU,rr=r*(1+.18*Math.sin(3*th+dr.ph*3)+.1*Math.sin(5*th-dr.ph*2))*(th<.6||th>5.7?1.25:1);const x=Math.cos(th)*rr,y=Math.sin(th)*rr*.85;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}
+  ctx.scale(1,1-Math.abs(dr.bank)*.35);
+  // swept, delta-like cell body with pseudopod "wings"
+  for(let i=0;i<=28;i++){const th=i/28*TAU,wing=Math.pow(Math.abs(Math.sin(th)),3)*.55*(Math.cos(th)<0?1:.4),rr=r*(1+.1*Math.sin(5*th-dr.ph*3)+wing)*(Math.abs(th-Math.PI)>2.6?1.35:1);const x=Math.cos(th)*rr,y=Math.sin(th)*rr*.8;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}
   ctx.closePath();
   ctx.fillStyle=ult?'rgba(185,226,255,.14)':'rgba(200,215,222,.1)';ctx.fill();
   ctx.strokeStyle=ult?'rgba(185,226,255,.7)':'rgba(220,232,238,.55)';ctx.lineWidth=1.3;ctx.stroke();
