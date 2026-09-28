@@ -391,7 +391,7 @@ const HT={
   boardEyebrow:['Những người trì hoãn chào đời lâu nhất','Those who postponed being born the longest'],
   tabStat:['Chỉ số','Stats'],tabWpn:['Vũ khí','Weapons'],tabGene:['Gen','Genes'],
   statNote:['ADN nhận sau mỗi ván. Thua càng muộn, ADN càng nhiều.','You earn DNA after every run. The later you lose, the more DNA you get.'],
-  wpnNote:['Chọn tối đa 4 vũ khí phụ mang vào trận (bấm “Mang theo”). Khi lên cấp, chỉ vũ khí đang mang mới xuất hiện trong thẻ. Nâng cấp bằng ADN.','Pick up to 4 secondary weapons to bring into a run (press “Equip”). Only equipped weapons appear on level-up cards. Upgrade with DNA.'],
+  wpnNote:['Chọn tối đa 4 vũ khí phụ mang vào trận (bấm “Mang theo”). Khi lên cấp, chỉ vũ khí đang mang mới xuất hiện trong thẻ. Mở khóa bằng tế bào gốc (TBG), nâng cấp bằng ADN.','Pick up to 4 secondary weapons to bring into a run (press “Equip”). Only equipped weapons appear on level-up cards. Unlock with stem cells (SC), upgrade with DNA.'],
   mergeAll:['Hợp nhất tất cả','Merge all'],
   quizEyebrow:['Cơ hội tái sinh · 1 lần mỗi ván · trả lời đúng để khỏi chào đời','Rebirth chance · once per run · answer right to avoid being born'],
   geneNote:['Gen rơi ra sau mỗi ván, ván càng dài và hạ càng nhiều boss thì càng nhiều gen hiếm. Chạm vào gen để gắn hoặc tháo. 3 gen giống nhau, cùng độ hiếm sẽ hợp nhất thành 1 gen hiếm hơn.','Genes drop after every run; longer runs and more bosses mean rarer genes. Tap a gene to equip or remove it. 3 identical genes of the same rarity merge into 1 rarer gene.'],
@@ -459,11 +459,12 @@ try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
 function fixSave(){
   for(const k of ['perm','skl'])if(!S[k]||typeof S[k]!=='object'||Array.isArray(S[k]))S[k]={};
   for(const k of ['unl','load','genes','equip'])if(!Array.isArray(S[k]))S[k]=[];
-  for(const k of ['shot','spin','bomb','emp','zap','laser','jet'])if(!S.unl.includes(k))S.unl.push(k);
+  // weapons beyond the 3 starters must be unlocked with stem cells again; saves that were
+  // auto-unlocked for a while keep only the weapons the player actually upgraded
+  if(S.unlV!==2){S.unl=['shot','spin','bomb',...['emp','zap','laser','jet'].filter(k=>(S.skl[k]||0)>0)];S.unlV=2}
+  for(const k of ['shot','spin','bomb'])if(!S.unl.includes(k))S.unl.push(k);
   S.load=S.load.filter(x=>S.unl.includes(x)).slice(0,4);
-  // old saves kept the 3 starter weapons; give everyone the jet and the laser by default once
-  if(!S.load.length||(!S.loadV&&S.load.join()==='shot,spin,bomb'))S.load=['jet','laser','zap','bomb'];
-  S.loadV=1;
+  if(!S.load.length)S.load=S.unl.slice(0,4);
   S.equip=S.equip.filter(id=>S.genes.some(g=>g.id===id));
   S.adn=+S.adn||0;S.stem=+S.stem||0;S.slots=clamp(+S.slots||4,4,6);S.gid=+S.gid||S.genes.length;
 }
@@ -533,7 +534,7 @@ function mergeAll(){
     }}
   return made;
 }
-const SK_UNLOCK={shot:0,spin:0,bomb:0,emp:0,zap:0,laser:0,jet:0};
+const SK_UNLOCK={shot:0,spin:0,bomb:0,emp:12,zap:20,laser:28,jet:36};
 const SK_ORDER=['shot','spin','bomb','emp','zap','laser','jet'];
 const SKL_MAX=10,sklCost=l=>Math.floor(25*Math.pow(1.45,l));
 
