@@ -18,4 +18,5 @@ ${body}
 `;
 fs.mkdirSync(__dirname+'/docs',{recursive:true});
 fs.writeFileSync(__dirname+'/docs/index.html',out);
+fs.copyFileSync(__dirname+'/ultrasound.gif',__dirname+'/docs/ultrasound.gif');
 console.log('built docs/index.html',out.length,'bytes');
